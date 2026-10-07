@@ -29,6 +29,7 @@ CONTENT TO REPLACE (all marked TBC / sample)
   news.html        posts (copy an <article class="post"> block)
   gallery.html     photos: put files in assets/photos/ and swap in an <img> (comment shows how)
   faq.html         answers, e.g. membership fee
+  about.html       Mission and Vision (section id="mission-vision"): draft wording written from the page's own text, replace with the official statements if you have them
 
 FILES
   assets/style.css  base styles     assets/extra.css  nav, forms, new pages, animations
@@ -61,3 +62,10 @@ JOIN CONFIRMATION (welcome.html)
 LEADERSHIP (leadership.html)
   Architecture Chapter Council is split into dockets A-D; Urban & Regional Planning council below.
   A how-to-update comment sits at the top of the Architecture section.
+  Every portrait (president included) is the same square size; the grid is set in assets/extra.css ("people").
+  Phones show two people per row.
+
+LAYOUT NOTES
+  The graph-paper grid is drawn only in the home hero and the page headers; content sections are plain colour.
+  Phones and tablets (860px and below): the home hero sizes to its content (style.css, inside the 860px media query)
+  instead of filling the whole screen, so the logo bar and the ASATUK heading sit close together.

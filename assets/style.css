@@ -7,8 +7,7 @@ a{color:inherit}
 :focus-visible{outline:3px solid var(--r);outline-offset:3px}
 .wrap{max-width:1240px;margin:0 auto;padding:0 28px}
 .dark{background:var(--k);color:#fff}
-.grid{background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:110px 110px}
-.paper{background-image:linear-gradient(rgba(5,5,5,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(5,5,5,.06) 1px,transparent 1px);background-size:110px 110px}
+/* The graph-paper grid is drawn only in the hero and page headers (see "Hero + page headers" below). Content sections are plain colour. */
 .hero{position:relative;min-height:100vh;min-height:100svh;overflow:hidden;display:flex;flex-direction:column}
 .hero>.wrap:first-of-type{width:100%}
 .plan{position:absolute;right:-4%;top:9%;width:min(72vw,900px);height:auto;pointer-events:none}
@@ -35,29 +34,25 @@ nav ul a:hover,nav ul a.on{color:var(--r)}
 .btn.w{background:#fff;color:var(--k)}
 .hero-body{position:relative;z-index:2;margin-top:auto;padding-bottom:44px;width:100%}
 .tag{display:flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#a9a9a4;margin-bottom:18px}
-.tag:before{content:"";width:40px;height:1px;background:var(--r)}
 .hero h1{font-size:clamp(72px,19vw,300px)}
 .hero-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-top:30px;flex-wrap:wrap}
 .hero-foot p{margin:0;max-width:40ch;color:#c9c9c4}
 .ph{overflow:hidden}
 .ph-body{padding-top:70px;padding-bottom:56px}
-.ph h1{font-size:clamp(64px,14vw,210px)}
+.ph h1{font-size:clamp(44px,14vw,210px)}
 i{font-style:normal;color:var(--r)}
 i.k{color:var(--k)}
 section{padding:96px 0}
-h2{font-size:clamp(56px,11vw,168px)}
+h2{font-size:clamp(40px,7vw,104px)}
 .head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-bottom:56px}
 .head p{max-width:40ch;margin:0;color:#55554f}
 .dark .head p{color:#a9a9a4}
 .panel{background:var(--r);color:#fff}
 .panel .head p{color:#ffe1da}
-.cols{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid currentColor}
-.cols.c3{grid-template-columns:repeat(3,1fr);border-color:var(--k)}
-.cols div{padding:26px 22px 40px;border-right:1px solid rgba(128,128,120,.35)}
-.cols div:first-child{padding-left:0}
-.cols div:last-child{border-right:0}
-.cols h3{font-size:34px;line-height:1;margin-bottom:14px}
-.cols p{margin:0 0 22px;color:#8f8f88}
+.cols{display:grid;grid-template-columns:repeat(4,1fr);gap:44px 40px}
+.cols.c3{grid-template-columns:repeat(3,1fr)}
+.cols h3{font-size:30px;line-height:1.05;margin-bottom:12px}
+.cols p{margin:0;max-width:30ch;color:#8f8f88}
 .paper .cols p{color:#55554f}
 .about{display:grid;grid-template-columns:1fr 1fr;gap:40px}
 .about p{margin:0;max-width:52ch;font-size:19px}
@@ -66,9 +61,7 @@ h2{font-size:clamp(56px,11vw,168px)}
 .ev b{font-size:26px;font-weight:500;letter-spacing:-.03em}
 .ev span{font-size:14px;letter-spacing:.14em;text-transform:uppercase}
 .ev em{display:block;font-style:normal;opacity:.85}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}
-.card{border:1px solid var(--k);padding:18px;background:#f8f7f2}
-.card.dk{background:#0e0e0e;border-color:rgba(255,255,255,.3)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:44px 28px}
 .card small{display:block;color:var(--g);font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin:14px 0 8px}
 .card h3{font-size:30px;line-height:1}
 .ph-img{background:#e6e3da;aspect-ratio:5/3;display:grid;place-items:center}
@@ -77,8 +70,12 @@ h2{font-size:clamp(56px,11vw,168px)}
 .init{aspect-ratio:5/3;display:grid;place-items:center;font-size:72px;letter-spacing:-.05em;color:#3a3a38;background:#161616}
 footer{padding:30px 0 40px;font-size:14px;color:var(--g)}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-@media (max-width:860px){nav ul{order:3;width:100%;margin:0;gap:16px}.srch{margin-left:auto}.srch input{width:150px}.cols,.cols.c3{grid-template-columns:1fr 1fr}.cols div{border-bottom:1px solid rgba(128,128,120,.35)}.about{grid-template-columns:1fr}.ev li{grid-template-columns:1fr;gap:6px}section{padding:64px 0}.plan{width:130vw;right:-40%;top:14%}}
-@media (max-width:520px){.cols,.cols.c3{grid-template-columns:1fr}.cols div{padding-left:0;border-right:0}}
+@media (max-width:860px){nav ul{order:3;width:100%;margin:0;gap:16px}.srch{margin-left:auto}.srch input{width:150px}.cols,.cols.c3{grid-template-columns:1fr 1fr;gap:36px 28px}.about{grid-template-columns:1fr;gap:24px}.ev li{grid-template-columns:1fr;gap:6px}section{padding:60px 0}.head{margin-bottom:36px}
+/* Tablet/phone hero: size to the content instead of a full-screen flex column.
+   On desktop .hero is min-height:100svh and .hero-body{margin-top:auto} pins the heading to the bottom,
+   which on a tall narrow screen left a 200-400px hole between the logo bar and the heading. */
+.hero{min-height:0}.hero-body{margin-top:clamp(28px,8vw,56px);padding-bottom:36px}.hero-foot{margin-top:24px}.plan{width:min(120vw,640px);right:-34%;top:64px}.ph-body{padding-top:36px;padding-bottom:40px}}
+@media (max-width:520px){.cols,.cols.c3{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
 .note{padding:14px 28px;font-weight:500;background:#1f6f43;color:#fff}.note.error{background:#a02a1c}
@@ -95,7 +92,6 @@ h2.s{font-size:clamp(40px,6vw,80px);margin-bottom:22px}
 @media (max-width:860px){.two{grid-template-columns:1fr}}
 /* ===== Lighter theme ===== */
 .dark{background:#e9e6dc;color:#050505}
-.grid{background-image:linear-gradient(rgba(5,5,5,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(5,5,5,.07) 1px,transparent 1px)}
 .paper{background-color:#fbfaf6}
 .hero.dark,.ph.dark{background-color:#f1efe9}
 .top{color:#050505}
@@ -114,17 +110,15 @@ nav ul a:hover,nav ul a.on{color:var(--r)}
 .plan *{stroke:rgba(5,5,5,.3)}
 .plan .h{stroke:rgba(217,80,59,.9)}
 .dark .head p{color:#55554f}
-.cols div{border-right-color:rgba(5,5,5,.2)}
-.cols div{border-bottom-color:rgba(5,5,5,.2)}
 .cols p,.dark .cols p{color:#55554f}
-.card.dk{background:#fbfaf6;border-color:#050505}
 .init{background:#e2dfd5;color:#a19e92}
 .card small{color:#6b6b65}
 footer,footer.dark{background:#e9e6dc;color:#55554f;border-top:1px solid rgba(5,5,5,.25)}
 footer a{color:#050505}
-/* ===== Hero: fade the background lines, make the intro text clearer ===== */
-.hero.grid{background-image:none;position:relative}
-.hero.grid::before{content:"";position:absolute;inset:0;pointer-events:none;
+/* ===== Hero + page headers: graph-paper grid that fades out; the only place it is used ===== */
+.hero.grid,.ph.grid{position:relative}
+.ph-body{position:relative;z-index:2}
+.hero.grid::before,.ph.grid::before{content:"";position:absolute;inset:0;pointer-events:none;
 background-image:linear-gradient(rgba(5,5,5,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(5,5,5,.06) 1px,transparent 1px);background-size:110px 110px;
 -webkit-mask-image:linear-gradient(to top right,transparent 15%,#000 75%);mask-image:linear-gradient(to top right,transparent 15%,#000 75%)}
 .hero .plan{opacity:.5;-webkit-mask-image:linear-gradient(to top right,transparent 28%,#000 80%);mask-image:linear-gradient(to top right,transparent 28%,#000 80%)}

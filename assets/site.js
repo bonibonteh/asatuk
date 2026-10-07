@@ -6,7 +6,7 @@ if(mb)mb.addEventListener('click',function(){var o=nv.classList.toggle('open');m
 d.addEventListener('keydown',function(e){if(e.key==='Escape'&&nv&&nv.classList.contains('open')){nv.classList.remove('open');mb.setAttribute('aria-expanded','false')}});
 /* scroll reveal */
 if('IntersectionObserver' in window&&!rm){
-var sel='.head,.cols>div,.ev li,.card,.about p,.post,.tile,.faq details,.form,.two>div,.ticks li,.ty>*,.sp-lead,.sp-facts,.sp-collage figure,.sp-trio figure';
+var sel='.head,.cols>div,.ev li,.card,.about p,.post,.tile,.faq details,.form,.two>div,.ticks li,.ty>*,.sp-lead,.sp-facts,.sp-collage figure,.sp-trio figure,.mv-item';
 var els=[].slice.call(d.querySelectorAll('main '+sel.split(',').join(',main ')));
 var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
 els.forEach(function(el,i){var sib=[].indexOf.call(el.parentNode.children,el);el.classList.add('rv');el.style.setProperty('--d',Math.min(sib,6)*.08+'s');io.observe(el)});
@@ -62,9 +62,6 @@ if(hb){var s=d.createElement('a');s.className='scroll';s.href='#main';s.innerHTM
 if(fine){var r=0;
 hero.addEventListener('pointermove',function(e){if(r)return;r=requestAnimationFrame(function(){r=0;var b=hero.getBoundingClientRect();hero.style.setProperty('--sx',e.clientX-b.left+'px');hero.style.setProperty('--sy',e.clientY-b.top+'px');hero.classList.add('lit')})});
 hero.addEventListener('pointerleave',function(){hero.classList.remove('lit')})}}
-if(fine)d.querySelectorAll('.btn').forEach(function(b){
-b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.setProperty('--tx',((e.clientX-r.left)/r.width-.5)*10+'px');b.style.setProperty('--ty',((e.clientY-r.top)/r.height-.5)*8+'px')});
-b.addEventListener('pointerleave',function(){b.style.removeProperty('--tx');b.style.removeProperty('--ty')})});
 })();
 /* social links: edit here. An empty URL shows the name as plain text until you add the link. */
 (function(){
