@@ -1,20 +1,20 @@
 (function(){
 var d=document,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-/* mobile menu */
-var nv=d.querySelector('nav'),mb=d.querySelector('.menu');
-if(mb)mb.addEventListener('click',function(){var o=nv.classList.toggle('open');mb.setAttribute('aria-expanded',o)});
-d.addEventListener('keydown',function(e){if(e.key==='Escape'&&nv&&nv.classList.contains('open')){nv.classList.remove('open');mb.setAttribute('aria-expanded','false')}});
-/* scroll reveal */
-if('IntersectionObserver' in window&&!rm){
-var sel='.head,.cols>div,.ev li,.card,.about p,.post,.tile,.faq details,.form,.two>div,.ticks li,.ty>*,.sp-lead,.sp-facts,.sp-collage figure,.sp-trio figure,.mv-item';
-var els=[].slice.call(d.querySelectorAll('main '+sel.split(',').join(',main ')));
-var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
-els.forEach(function(el,i){var sib=[].indexOf.call(el.parentNode.children,el);el.classList.add('rv');el.style.setProperty('--d',Math.min(sib,6)*.08+'s');io.observe(el)});
-/* hero plan draws itself */
-d.querySelectorAll('.plan *').forEach(function(el,i){el.setAttribute('pathLength','1');el.style.setProperty('--d',(i*.06)+'s')});
-/* gentle parallax on the plan */
-var p=d.querySelector('.plan');
-if(p&&!matchMedia("(max-width:860px)").matches){var t=false;addEventListener('scroll',function(){if(t)return;t=true;requestAnimationFrame(function(){p.style.transform='translateY('+Math.min(scrollY,700)*.18+'px)';t=false})},{passive:true})}
+/* mobile menu: slides and fades open and closed (height is measured, so it never jumps) */
+var nv=d.querySelector('nav'),mb=d.querySelector('.menu'),nb=d.querySelector('.navbar'),mq=matchMedia('(max-width:1240px)');
+function openMenu(){
+nv.style.setProperty('--nh',nb.scrollHeight+28+'px');
+nv.classList.add('open');mb.setAttribute('aria-expanded','true');
+if(rm){nv.classList.add('settled')}else{setTimeout(function(){if(nv.classList.contains('open'))nv.classList.add('settled')},560)}
+}
+function closeMenu(){
+if(nv.classList.contains('settled')){nv.style.setProperty('--nh',nb.offsetHeight+'px');nv.classList.remove('settled');void nb.offsetHeight}
+nv.classList.remove('open');mb.setAttribute('aria-expanded','false');
+}
+if(mb&&nv&&nb){
+mb.addEventListener('click',function(){nv.classList.contains('open')?closeMenu():openMenu()});
+d.addEventListener('keydown',function(e){if(e.key==='Escape'&&nv.classList.contains('open')){closeMenu();mb.focus()}});
+(mq.addEventListener?mq.addEventListener.bind(mq,'change'):mq.addListener.bind(mq))(function(){if(!mq.matches){nv.classList.remove('open','settled');mb.setAttribute('aria-expanded','false')}});
 }
 /* forms: send to Formspree (emails the committee); fall back to mailto */
 d.querySelectorAll('form[data-next]').forEach(function(f){
@@ -46,22 +46,11 @@ g.addEventListener('click',function(e){var t=e.target.closest('.tile');if(!t)ret
 lb.addEventListener('click',function(){lb.classList.remove('open')});
 d.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open')});}
 })();
-/* v2: energy upgrade */
+/* small helpers: stagger index for the mobile menu, TBC chip on events */
 (function(){
-var d=document,fine=matchMedia('(hover:hover) and (pointer:fine)').matches,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+var d=document;
 d.querySelectorAll('.navbar li').forEach(function(l,i){l.style.setProperty('--i',i)});
 d.querySelectorAll('.ev li>b:first-child').forEach(function(b){if(/TBC/i.test(b.textContent))b.classList.add('tbc')});
-if(rm)return;
-var pg=d.createElement('div');pg.className='pg';pg.setAttribute('aria-hidden','true');d.body.appendChild(pg);
-var tk=false;function up(){tk=false;var h=d.documentElement.scrollHeight-innerHeight;pg.style.transform='scaleX('+(h>0?Math.min(scrollY/h,1):0)+')'}
-addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(up)}},{passive:true});up();
-var hero=d.querySelector('.hero');
-if(hero){
-var hb=hero.querySelector('.hero-body');
-if(hb){var s=d.createElement('a');s.className='scroll';s.href='#main';s.innerHTML='<i aria-hidden="true"></i>Scroll';hb.appendChild(s)}
-if(fine){var r=0;
-hero.addEventListener('pointermove',function(e){if(r)return;r=requestAnimationFrame(function(){r=0;var b=hero.getBoundingClientRect();hero.style.setProperty('--sx',e.clientX-b.left+'px');hero.style.setProperty('--sy',e.clientY-b.top+'px');hero.classList.add('lit')})});
-hero.addEventListener('pointerleave',function(){hero.classList.remove('lit')})}}
 })();
 /* social links: edit here. An empty URL shows the name as plain text until you add the link. */
 (function(){
