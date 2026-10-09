@@ -12,7 +12,7 @@
 <meta property="og:image" content="assets/logo.png">
 <meta name="twitter:card" content="summary">
 <title>News | ASA TUK</title>
-<script>document.documentElement.className="js"</script>
+<script>document.documentElement.className="js";try{if(sessionStorage.getItem("asa")){document.documentElement.className+=" seen"}else{sessionStorage.setItem("asa","1")}}catch(e){}</script>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="assets/style.css">
@@ -26,7 +26,7 @@
 <a class="logo" href="index.html"><img src="assets/logo.png" alt="" width="58" height="58">ASA TUK</a>
 <button class="menu" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu"><span></span><span></span></button>
 <div class="navbar" id="menu">
-<ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="events.html">Events</a></li><li><a href="projects.html">Projects</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="news.html" class="on" aria-current="page">News</a></li><li><a href="leadership.html">Leadership</a></li><li><a href="contact.html">Contact</a></li></ul>
+<ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="events.html">Events</a></li><li><a href="projects.html">Projects</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="news.html" class="on" aria-current="page">News</a></li><li><a href="leadership.html">Leadership</a></li><li><a href="partner.html">Partner</a></li><li><a href="support.html">Support</a></li><li><a href="contact.html">Contact</a></li></ul>
 <a class="hub-nav" href="https://linktr.ee/asa_tuk" target="_blank" rel="noopener noreferrer" aria-label="ASA TUK Student Hub (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>Student Hub</a><a class="btn nj" href="join.html">Join</a>
 <div class="srch" role="search"><input id="q" type="search" placeholder="Search (press /)" aria-label="Search the site" autocomplete="off" aria-controls="res"><div id="res" role="listbox" aria-live="polite"></div></div>
 </div>
@@ -39,18 +39,52 @@
 <div class="head"><p>Announcements from the committee. Newest first.</p></div>
 <div class="posts">
 <!-- To add a post: copy one <article class="post"> block below and paste it at the top. -->
-<article class="post"><div class="pm"><time>Date TBC</time><span>Announcement</span></div><div><h3>Welcome to the new ASA TUK website</h3><p>Events, projects, the committee and a membership form now live in one place. Register to hear about everything first.</p></div></article>
-<article class="post"><div class="pm"><time>Date TBC</time><span>Events</span></div><div><h3>Semester calendar coming soon</h3><p>The committee is finalising dates for the welcome mixer, workshops and the site visit. Members get them by email first.</p></div></article>
+<article class="post"><div class="pm"><time datetime="2026-10-10">10 October 2026</time><span>Announcement</span></div><div><h3>Welcome to the new ASA TUK website</h3><p>The new ASA TUK website goes live on 10 October 2026. Events, projects, the committee and the membership form are now in one place. Register to hear about everything first, or <a href="#subscribe">subscribe to our news</a> if you only want updates by email.</p></div></article>
+<article class="post"><div class="pm"><time datetime="2026-10-09">9 October 2026</time><span>Events</span></div><div><h3>2026&ndash;2027 calendar of events</h3><p>The ASA TUK calendar for the 2026&ndash;2027 academic year is out. Save the dates:</p>
+<div class="cal">
+<div><h4>September</h4><p><b>26</b>Sip &amp; Paint</p></div>
+<div><h4>October</h4><p><b>10</b>Mental health campaign</p><p><b>17</b>Site visit</p></div>
+<div><h4>November</h4><p><b>14</b>Exhibition</p><p><b>28</b>Sketch tour</p></div>
+<div><h4>January</h4><p><b>16</b>Konza site visit</p></div>
+<div><h4>February</h4><p><b>19</b>Kenya Clay Products visit</p></div>
+<div><h4>March</h4><p><b>13</b>Public lecture</p><p><b>27</b>AGM</p></div>
+</div>
+<p class="cal-note">Nothing is scheduled yet for December and April. Details for each event are shared here and by email as they are confirmed.</p></div></article>
 <article class="post"><div class="pm"><time>Date TBC</time><span>Projects</span></div><div><h3>Call for project submissions</h3><p>Have studio work, research or a competition entry to share? Send it through the contact page and it may be featured in the archive.</p></div></article>
 </div>
+</div></section>
+<section class="paper sub" id="subscribe" aria-labelledby="sub-h"><div class="wrap sub-grid">
+<div class="sub-copy">
+<div class="tag">News and updates</div>
+<h2 class="s" id="sub-h">Get ASA TUK news<i>.</i></h2>
+<p class="lead">Event dates, announcements and opportunities, sent to your inbox. You do not need to be a member to subscribe.</p>
+<p class="lead small">Want to join the association instead? <a href="join.html">Register as a member</a>. News and membership are separate, and you can do either or both.</p>
+</div>
+<form class="form soft" name="news-subscription" method="post" action="mailto:asatuk@students.tukenya.ac.ke" enctype="text/plain" data-form="subscribe" data-mailto="asatuk@students.tukenya.ac.ke" data-subject="ASA TUK news subscription">
+<input type="hidden" name="_subject" value="ASA TUK website: news subscription"><input type="hidden" name="form" value="news-subscription"><input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<label>Name (optional)<input name="name" maxlength="100" autocomplete="name"></label>
+<label>Email<input name="email" type="email" required maxlength="150" autocomplete="email"></label>
+<fieldset><legend>I would like news about</legend>
+<label class="ck"><input type="checkbox" name="topics" value="Events"> Events</label>
+<label class="ck"><input type="checkbox" name="topics" value="Announcements"> Announcements</label>
+<label class="ck"><input type="checkbox" name="topics" value="Opportunities"> Opportunities</label>
+</fieldset>
+<label class="ck consent"><input type="checkbox" name="consent" value="yes" required> I agree to receive ASA TUK news by email. I can ask to be removed at any time.</label>
+<button class="btn" type="submit">Subscribe</button>
+<div class="form-msg" role="status" aria-live="polite" hidden></div>
+<div class="form-done" tabindex="-1" hidden><h3>Thank you.</h3><p>Your subscription has been received. We will send ASA TUK news to this address. To stop, reply to any email from us and ask to be removed.</p></div>
+</form>
 </div></section>
 <section class="paper hub-sec" aria-label="ASA TUK Student Hub"><div class="wrap"><a class="hub-strip" href="https://linktr.ee/asa_tuk" target="_blank" rel="noopener noreferrer" aria-label="ACCESS STUDENT HUB (opens in a new tab)"><span class="hs-l"><span class="hs-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg></span><span><b>ASA TUK Student Hub</b><small>All your ASA TUK links in one place: resources, forms, events, merch and announcements.</small></span></span><span class="hs-b">Access Student Hub <i>&rarr;</i></span></a></div></section>
 </main>
 <footer class="dark"><div class="wrap"><div class="fl"><img src="assets/logo.png" alt="ASA TUK logo" width="56" height="56">ASA TUK, Architecture Student Association, Technical University of Kenya, Nairobi.</div>
-<div class="fr"><a class="hub-foot" href="https://linktr.ee/asa_tuk" target="_blank" rel="noopener noreferrer" aria-label="ASA TUK Student Hub (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>ASA TUK Student Hub</a> <a href="join.html">Join</a> <a href="faq.html">FAQ</a> <a href="news.html">News</a> <a href="mailto:asatuk@students.tukenya.ac.ke">asatuk@students.tukenya.ac.ke</a></div></div></footer>
+<div class="fr"><a class="hub-foot" href="https://linktr.ee/asa_tuk" target="_blank" rel="noopener noreferrer" aria-label="ASA TUK Student Hub (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>ASA TUK Student Hub</a> <a href="join.html">Join</a> <a href="faq.html">FAQ</a> <a href="news.html">News</a> <a href="partner.html">Partner</a> <a href="support.html">Support</a> <a href="mailto:asatuk@students.tukenya.ac.ke">asatuk@students.tukenya.ac.ke</a></div></div></footer>
 <a class="hub-fab" href="https://linktr.ee/asa_tuk" target="_blank" rel="noopener noreferrer" aria-label="ASA TUK Student Hub (opens in a new tab)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>Student Hub</a>
-<script>window.IDX=[["Home","index.html","Student association for architecture and urban & regional planning students of the Technical University of Kenya"],["About","about.html","Who we are, our mission and vision, studio culture, climate, community, materials"],["Events","events.html","Welcome mixer, portfolio and CV workshop, site visit, exhibition"],["Projects","projects.html","Student research, design competitions, community builds, exhibitions"],["Gallery","gallery.html","Photos of studio, site visits, exhibitions and events"],["News","news.html","Announcements and updates from the committee"],["Leadership","leadership.html","Architecture Chapter Council and Urban & Regional Planning Chapter Council: president Bonface Oino, vice president Joy Too, secretary general Leasebeth Wakla, assistant secretary general Mitchelle Jepkurgat, treasurer Raphael Ndombi, assistant organizing secretary Dennis Mwendwa, public relations secretary Alex Muthui, assistant public relations secretary Enock Tonui, events secretary Samuel Kimanzi, social media strategist Fabian Maina, assistant merchandise secretary Juliet Jepkosgei"],["Join","join.html","Register as a member of ASA TUK, architecture and urban & regional planning students, sign up, membership form"],["FAQ","faq.html","Questions about membership, events, cost, sponsorship and contact"],["Contact","contact.html","Email the committee, collaborate, sponsorship"],["Student Hub","https://linktr.ee/asa_tuk","ASA TUK Student Hub Linktree: resources, forms, events, merchandise, announcements, student links, QR code"],["Sip & Paint","sip-and-paint.html","Paint and sip event, October 2026, photos"]];</script>
+<script>window.IDX=[["Home","index.html","Student association for architecture and urban & regional planning students of the Technical University of Kenya"],["About","about.html","Who we are, our mission and vision, studio culture, climate, community, materials"],["Events","events.html","Welcome mixer, portfolio and CV workshop, site visit, exhibition"],["Projects","projects.html","Student research, design competitions, community builds, exhibitions"],["Gallery","gallery.html","Photos of studio, site visits, exhibitions and events"],["News","news.html","Announcements and updates from the committee"],["Leadership","leadership.html","Architecture Chapter Council and Urban & Regional Planning Chapter Council: president Bonface Oino, vice president Joy Too, secretary general Leasebeth Wakla, assistant secretary general Mitchelle Jepkurgat, treasurer Raphael Ndombi, assistant organizing secretary Dennis Mwendwa, public relations secretary Alex Muthui, assistant public relations secretary Enock Tonui, events secretary Samuel Kimanzi, social media strategist Fabian Maina, assistant merchandise secretary Juliet Jepkosgei"],["Join","join.html","Register as a member of ASA TUK, architecture and urban & regional planning students, sign up, membership form"],["FAQ","faq.html","Questions about membership, events, cost, sponsorship and contact"],["Contact","contact.html","Email the committee, collaborate, sponsorship"],["Student Hub","https://linktr.ee/asa_tuk","ASA TUK Student Hub Linktree: resources, forms, events, merchandise, announcements, student links, QR code"],["Sip & Paint","sip-and-paint.html","Paint and sip event, October 2026, photos"],["Partner With ASA TUK","partner.html","Partnerships and collaboration: mentorship, internships, site visits, workshops, competitions, sponsorship, architecture firms, organisations, enquiry form"],["Support ASA TUK","support.html","Support and donations: sponsorship, contributions, alumni, where your support goes, student exhibitions, competitions, workshops, resources"],["News subscription","news.html#subscribe","Subscribe to ASA TUK news and updates by email, newsletter, you do not need to be a member"]];</script>
 <script src="assets/search.js"></script>
 <script src="assets/site.js"></script>
+<script src="assets/motion.js"></script>
+<script src="assets/config.js"></script>
+<script src="assets/forms.js"></script>
 </body>
 </html>
