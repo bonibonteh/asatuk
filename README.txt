@@ -34,8 +34,8 @@ CONTENT TO REPLACE (all marked TBC / sample)
 
 FILES
   assets/style.css  base styles     assets/extra.css  nav, forms, new pages, animations
-  assets/site.js    mobile menu, membership + contact forms, lightbox, social links     assets/search.js  site search
-  assets/motion.js  scroll reveals, parallax, count-up numbers     assets/forms.js  the three NEW forms     assets/config.js  their Formspree IDs
+  assets/site.js    mobile menu, scroll reveals, hero animations, membership + contact forms, lightbox, social links     assets/search.js  site search
+  assets/forms.js  the three NEW forms     assets/config.js  their Formspree IDs
   Animations switch off automatically for visitors who prefer reduced motion.
 
 SOCIAL LINKS
@@ -91,11 +91,10 @@ NEWS POSTS
   The home page statistics (index.html, class "stats") count: 2 chapters, 4 council dockets, 9 events on the calendar, 3 site visits.
   Change the numbers in data-count and in the text beside it if the calendar or councils change.
 
-MOTION (assets/motion.js + the "MOTION + IMAGES" block in assets/extra.css)
-  Fade-and-rise text, image reveals, a very slow zoom plus a plain overlay on hover (mouse screens only), count-up numbers,
-  gentle parallax on wide mouse screens only (add data-parallax="0.07" to a <figure> containing one <img> to use it), a smooth mobile menu,
-  a soft first-visit logo arrival. Nothing loops and no lines are animated. Visitors who ask their device for reduced motion get the finished
-  page with no movement. To turn parallax off, remove the data-parallax attribute and the "3. parallax" block in motion.js.
+MOTION (assets/site.js + the motion rules in assets/extra.css)
+  The original animations: scrolling ticker, hero plan drawing itself, hero wipe-in headline, scroll progress bar, scroll cue,
+  hero spotlight, animated nav underline, image wipe reveals, hover zoom and mobile menu animation. New sections use the same scroll reveal.
+  Everything switches off for visitors who prefer reduced motion.
 
 IMAGES
   gallery.html uses the real Sip & Paint photos (assets/sip/). Add new photos by copying a <figure class="tile"> block.
