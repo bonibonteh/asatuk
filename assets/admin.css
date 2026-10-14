@@ -8,3 +8,5 @@ tbody tr:hover{background:#f7f5ef}
 .metric{transition:transform .18s ease,border-color .18s ease}.metric:hover{transform:translateY(-2px);border-color:#c9c5b9}
 button:focus-visible,a:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+
+.gallery-photos-dialog{width:min(1050px,calc(100vw - 24px));}.gallery-photos-scroll{overflow:auto}.gallery-admin-thumb{width:84px;height:70px;object-fit:cover;background:#ebe8df;border:1px solid var(--line)}#gallery-photos-table input{min-width:115px;max-width:260px;width:100%;padding:9px;border:1px solid var(--line);background:#fffefa;font:inherit}.danger{color:#9c2e25!important;border-color:#d7aaa3!important}.gallery-photos-dialog .panel-head h2{font-size:22px;line-height:1.25}.gallery-photos-dialog .panel-head{align-items:center}
