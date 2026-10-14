@@ -79,15 +79,7 @@ e.textContent=t;w.appendChild(e)});
 return w}
 /* Admin portal: visible site-wide; admin.html still enforces Supabase sign-in and roles. */
 var navList=document.querySelector('.navbar ul, nav ul');
-if(navList&&!navList.querySelector('a[href="admin.html"]')){
-  var item=document.createElement('li');
-  var link=document.createElement('a');
-  link.href='admin.html';
-  link.textContent='Admin Portal';link.className='admin-nav';
-  link.setAttribute('aria-label','Open the ASA TUK staff admin portal');
-  item.appendChild(link);
-  navList.appendChild(item);
-}
+var existingAdmin=document.querySelector('nav a[href="admin.html"]');if(existingAdmin){existingAdmin.classList.add('admin-nav')}else if(navList){var item=document.createElement('li'),link=document.createElement('a');link.href='admin.html';link.textContent='Admin Portal';link.className='admin-nav';link.setAttribute('aria-label','Open the ASA TUK staff admin portal');item.appendChild(link);navList.appendChild(item)}
 var f=document.querySelector('footer .wrap');
 if(f){
   f.appendChild(build('',false));
