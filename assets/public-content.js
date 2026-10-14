@@ -82,7 +82,7 @@
       showMessage(root, 'New online announcements could not load. Please refresh the page.');
       return;
     }
-    if (!data || data.length === 0) return;
+    if (!data || data.length === 0) { showMessage(root, 'No published news yet. New announcements will appear here after an administrator publishes them.'); return; }
 
     data.forEach(item => {
       // Avoid duplicates if an announcement is also maintained in the static page content.
