@@ -77,7 +77,28 @@ if(s[2]){e=document.createElement('a');e.href=s[2];e.target='_blank';e.rel='noop
 else e=document.createElement('span');
 e.textContent=t;w.appendChild(e)});
 return w}
-var f=document.querySelector('footer .wrap');if(f)f.appendChild(build('',false));
+/* Admin portal: visible site-wide; admin.html still enforces Supabase sign-in and roles. */
+var navList=document.querySelector('.navbar ul, nav ul');
+if(navList&&!navList.querySelector('a[href="admin.html"]')){
+  var item=document.createElement('li');
+  var link=document.createElement('a');
+  link.href='admin.html';
+  link.textContent='Admin Portal';
+  link.setAttribute('aria-label','Open the ASA TUK staff admin portal');
+  item.appendChild(link);
+  navList.appendChild(item);
+}
+var f=document.querySelector('footer .wrap');
+if(f){
+  f.appendChild(build('',false));
+  if(!f.querySelector('a[href="admin.html"]')){
+    var admin=document.createElement('a');
+    admin.href='admin.html';
+    admin.textContent='Admin Portal';
+    admin.setAttribute('aria-label','Open the ASA TUK staff admin portal');
+    f.appendChild(admin);
+  }
+}
 var c=document.querySelector('#cf');
 if(c){var col=c.parentNode.firstElementChild;if(col)col.appendChild(build('soc-c',true))}
 })();
