@@ -2,7 +2,7 @@
 var d=document,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
 /* mobile menu */
 var nv=d.querySelector('nav'),mb=d.querySelector('.menu');
-if(mb)mb.addEventListener('click',function(){var o=nv.classList.toggle('open');mb.setAttribute('aria-expanded',o)});
+if(mb)mb.addEventListener('click',function(){var o=nv.classList.toggle('open');mb.setAttribute('aria-expanded',o)});if(nv)nv.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){if(nv.classList.contains('open')){nv.classList.remove('open');if(mb)mb.setAttribute('aria-expanded','false')}})});
 d.addEventListener('keydown',function(e){if(e.key==='Escape'&&nv&&nv.classList.contains('open')){nv.classList.remove('open');mb.setAttribute('aria-expanded','false')}});
 /* scroll reveal */
 if('IntersectionObserver' in window&&!rm){
@@ -83,7 +83,7 @@ if(navList&&!navList.querySelector('a[href="admin.html"]')){
   var item=document.createElement('li');
   var link=document.createElement('a');
   link.href='admin.html';
-  link.textContent='Admin Portal';
+  link.textContent='Admin Portal';link.className='admin-nav';
   link.setAttribute('aria-label','Open the ASA TUK staff admin portal');
   item.appendChild(link);
   navList.appendChild(item);
@@ -93,7 +93,7 @@ if(f){
   f.appendChild(build('',false));
   if(!f.querySelector('a[href="admin.html"]')){
     var admin=document.createElement('a');
-    admin.href='admin.html';
+    admin.href='admin.html';admin.className='admin-nav';
     admin.textContent='Admin Portal';
     admin.setAttribute('aria-label','Open the ASA TUK staff admin portal');
     f.appendChild(admin);
