@@ -1,5 +1,5 @@
--- Academic timetable library with a review-before-publication workflow.
--- Apply only to the Supabase project referenced by assets/admin-config.js.
+-- Private academic timetable storage with admin-only review and verified public access.
+-- Admin authorization matches this site's existing public.admin_users table.
 CREATE TABLE IF NOT EXISTS public.academic_timetables (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   title text NOT NULL CHECK (char_length(btrim(title)) BETWEEN 3 AND 180),
@@ -33,13 +33,32 @@ ALTER TABLE public.academic_timetables ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Verified timetables are publicly readable" ON public.academic_timetables;
 CREATE POLICY "Verified timetables are publicly readable"
   ON public.academic_timetables FOR SELECT TO anon, authenticated
-  USING (status = 'verified');
+  USING (
+    status = 'verified'
+    OR EXISTS (
+      SELECT 1 FROM public.admin_users au
+      WHERE au.user_id = (SELECT auth.uid())
+        AND au.role = 'admin'
+    )
+  );
 
-DROP POLICY IF EXISTS "Admins manage all academic timetables" ON public.academic_timetables;
-CREATE POLICY "Admins manage all academic timetables"
+DROP POLICY IF EXISTS "Admins manage academic timetables" ON public.academic_timetables;
+CREATE POLICY "Admins manage academic timetables"
   ON public.academic_timetables FOR ALL TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.admin_users au
+      WHERE au.user_id = (SELECT auth.uid())
+        AND au.role = 'admin'
+    )
+  )
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.admin_users au
+      WHERE au.user_id = (SELECT auth.uid())
+        AND au.role = 'admin'
+    )
+  );
 
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 VALUES ('academic-timetables','academic-timetables',false,26214400,
@@ -52,23 +71,38 @@ SET public = false,
 DROP POLICY IF EXISTS "Admins upload academic timetables" ON storage.objects;
 CREATE POLICY "Admins upload academic timetables"
   ON storage.objects FOR INSERT TO authenticated
-  WITH CHECK (bucket_id = 'academic-timetables' AND public.is_admin());
+  WITH CHECK (
+    bucket_id = 'academic-timetables'
+    AND EXISTS (SELECT 1 FROM public.admin_users au WHERE au.user_id = (SELECT auth.uid()) AND au.role = 'admin')
+  );
 
-DROP POLICY IF EXISTS "Admins update academic timetables files" ON storage.objects;
-CREATE POLICY "Admins update academic timetables files"
+DROP POLICY IF EXISTS "Admins update academic timetable files" ON storage.objects;
+CREATE POLICY "Admins update academic timetable files"
   ON storage.objects FOR UPDATE TO authenticated
-  USING (bucket_id = 'academic-timetables' AND public.is_admin())
-  WITH CHECK (bucket_id = 'academic-timetables' AND public.is_admin());
+  USING (
+    bucket_id = 'academic-timetables'
+    AND EXISTS (SELECT 1 FROM public.admin_users au WHERE au.user_id = (SELECT auth.uid()) AND au.role = 'admin')
+  )
+  WITH CHECK (
+    bucket_id = 'academic-timetables'
+    AND EXISTS (SELECT 1 FROM public.admin_users au WHERE au.user_id = (SELECT auth.uid()) AND au.role = 'admin')
+  );
 
-DROP POLICY IF EXISTS "Admins delete academic timetables files" ON storage.objects;
-CREATE POLICY "Admins delete academic timetables files"
+DROP POLICY IF EXISTS "Admins delete academic timetable files" ON storage.objects;
+CREATE POLICY "Admins delete academic timetable files"
   ON storage.objects FOR DELETE TO authenticated
-  USING (bucket_id = 'academic-timetables' AND public.is_admin());
+  USING (
+    bucket_id = 'academic-timetables'
+    AND EXISTS (SELECT 1 FROM public.admin_users au WHERE au.user_id = (SELECT auth.uid()) AND au.role = 'admin')
+  );
 
-DROP POLICY IF EXISTS "Admins read all academic timetable files" ON storage.objects;
-CREATE POLICY "Admins read all academic timetable files"
+DROP POLICY IF EXISTS "Admins read academic timetable files" ON storage.objects;
+CREATE POLICY "Admins read academic timetable files"
   ON storage.objects FOR SELECT TO authenticated
-  USING (bucket_id = 'academic-timetables' AND public.is_admin());
+  USING (
+    bucket_id = 'academic-timetables'
+    AND EXISTS (SELECT 1 FROM public.admin_users au WHERE au.user_id = (SELECT auth.uid()) AND au.role = 'admin')
+  );
 
 DROP POLICY IF EXISTS "Public read verified academic timetable files" ON storage.objects;
 CREATE POLICY "Public read verified academic timetable files"
