@@ -39,7 +39,7 @@
     const root = document.querySelector('.posts');
     if (!root) return;
     const {data, error} = await db.from('announcements')
-      .select('title,body,category,published_at,created_at')
+      .select('title,body,category,image_url,published_at,created_at')
       .eq('status', 'published')
       .order('published_at', {ascending: false});
 
@@ -66,13 +66,14 @@
       category.textContent = item.category || 'Announcement';
       meta.append(time, category);
       const body = document.createElement('div');
+      if(item.image_url && (item.image_url.startsWith('https://') || item.image_url.startsWith('http://'))){const image=document.createElement('img');image.src=item.image_url;image.alt='';image.loading='lazy';image.className='news-cover';article.appendChild(image)}
       const heading = document.createElement('h3');
       heading.textContent = item.title || 'ASA TUK announcement';
       const paragraph = document.createElement('p');
       paragraph.textContent = item.body || '';
       body.append(heading, paragraph);
       article.append(meta, body);
-      root.prepend(article);
+      root.appendChild(article);
     });
   }
 
