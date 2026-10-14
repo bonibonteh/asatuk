@@ -24,49 +24,15 @@
   }
 
   async function loadEvents() {
-    const root = document.querySelector('.ev');
-    if (!root) return;
-    // Remove sample placeholder events so visitors see the actual published records.
-    root.replaceChildren();
-    const {data, error} = await db.from('events')
-      .select('title,description,starts_at,venue,registration_url,status')
-      .eq('status', 'published')
-      .order('starts_at', {ascending: false});
-
-    if (error) {
-      console.error('ASA TUK events could not load:', error);
-      showMessage(root, 'Events could not load right now. Please refresh or check the ASA TUK news page.');
-      return;
-    }
-    if (!data || data.length === 0) {
-      showMessage(root, 'No published events yet. Please check back soon.');
-      return;
-    }
-
-    data.forEach(item => {
-      const li = document.createElement('li');
-      const title = document.createElement('b');
-      title.textContent = date(item.starts_at);
-      const details = document.createElement('div');
-      const name = document.createElement('b');
-      name.textContent = item.title || 'ASA TUK event';
-      const desc = document.createElement('em');
-      desc.textContent = item.description || '';
-      details.append(name, desc);
-      const venue = document.createElement('span');
-      venue.textContent = item.venue || 'ASA TUK';
-      if (item.registration_url) {
-        venue.append(document.createTextNode(' · '));
-        const link = document.createElement('a');
-        link.href = item.registration_url;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = 'Register';
-        venue.append(link);
-      }
-      li.append(title, details, venue);
-      root.appendChild(li);
-    });
+    const root=document.querySelector('.ev');if(!root)return;root.replaceChildren();
+    const {data,error}=await db.from('events').select('id,title,description,starts_at,ends_at,venue,cover_image_url,registration_url,status').eq('status','published').order('starts_at',{ascending:true});
+    if(error){console.error('ASA TUK events could not load:',error);showMessage(root,'Events could not load right now. Please refresh the page.');return}
+    if(!data||!data.length){showMessage(root,'No published events yet. Please check back soon.');return}
+    const now=Date.now(),bar=document.createElement('div');bar.className='event-filter';bar.setAttribute('role','group');bar.setAttribute('aria-label','Filter events');bar.innerHTML='<button type="button" class="event-filter-btn active" data-event-filter="upcoming">Upcoming</button><button type="button" class="event-filter-btn" data-event-filter="past">Past events</button><button type="button" class="event-filter-btn" data-event-filter="all">All events</button>';root.before(bar);
+    const list=document.createElement('div');list.className='event-grid';root.appendChild(list);
+    function render(mode){const rows=data.filter(x=>mode==='all'||(mode==='past'?x.starts_at&&new Date(x.starts_at).getTime()<now:!x.starts_at||new Date(x.starts_at).getTime()>=now));list.replaceChildren();if(!rows.length){showMessage(list,mode==='past'?'No past events published yet.':'No upcoming events published yet.');return}
+    rows.forEach(item=>{const article=document.createElement('article');article.className='event-card';if(item.cover_image_url&&/^https?:\/\//i.test(item.cover_image_url)){const image=document.createElement('img');image.src=item.cover_image_url;image.alt='';image.loading='lazy';image.className='event-cover';article.appendChild(image)}const body=document.createElement('div');body.className='event-card-body';const dt=document.createElement('span');dt.className='event-date';dt.textContent=date(item.starts_at);const h=document.createElement('h2');h.textContent=item.title||'ASA TUK event';const desc=document.createElement('p');desc.textContent=item.description||'More details will be shared by ASA TUK.';const meta=document.createElement('p');meta.className='event-meta';meta.textContent=(item.venue||'Venue to be confirmed')+(item.ends_at?' · Ends '+date(item.ends_at):'');body.append(dt,h,desc,meta);if(item.registration_url&&/^https?:\/\//i.test(item.registration_url)){const a=document.createElement('a');a.href=item.registration_url;a.target='_blank';a.rel='noopener noreferrer';a.className='event-register';a.textContent='Register ↗';body.appendChild(a)}article.appendChild(body);list.appendChild(article)})}
+    bar.addEventListener('click',e=>{const b=e.target.closest('[data-event-filter]');if(!b)return;bar.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));render(b.dataset.eventFilter)});render('upcoming');
   }
 
   async function loadNews() {
