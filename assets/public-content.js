@@ -110,6 +110,8 @@
     });
   }
 
-  if (path.endsWith('events.html')) loadEvents();
-  if (path.endsWith('news.html')) loadNews();
+  // Netlify serves these pages through both pretty URLs (/events, /news)
+  // and their physical HTML paths (/events.html, /news.html).
+  if (/(^|\/)events(?:\.html)?\/?$/.test(path)) loadEvents();
+  if (/(^|\/)news(?:\.html)?\/?$/.test(path)) loadNews();
 })();
