@@ -3,7 +3,7 @@ const cfg=window.ASATUK_SUPABASE, $=id=>document.getElementById(id);
 if(!window.supabase||!cfg){$('login-msg').textContent='Dashboard configuration could not load. Refresh and try again.';return}
 const db=window.supabase.createClient(cfg.url,cfg.publishableKey), tables={events:{label:'Events',table:'events',fields:[['venue','Venue','text'],['starts_at','Start date/time','datetime-local'],['ends_at','End date/time','datetime-local'],['registration_url','Registration link','url']]},announcements:{label:'Announcements',table:'announcements',fields:[['category','Category','text'],['image_url','Image URL','url']]},opportunities:{label:'Opportunities',table:'opportunities',fields:[['organisation','Organisation','text'],['category','Category','text'],['deadline','Deadline','date'],['application_url','Application link','url']]}};
 let role='editor',user=null,cache={events:[],announcements:[],opportunities:[],members:[]},current='overview';
-const canManageContent=()=>role==='admin'||role==='editor';
+const canManageContent=()=>role==='admin';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function message(t){$('notice').textContent=t;setTimeout(()=>{$('notice').textContent=''},6000)}
 function stamp(s){if(!s)return '—';let d=new Date(s);return isNaN(d)?s:d.toLocaleString()}
