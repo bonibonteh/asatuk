@@ -1,0 +1,2 @@
+/* Browser-safe public configuration only. Never place a service-role key here. */
+window.ASATUK_SUPABASE={url:'https://oppxkzbebvznohqwglgw.supabase.co',publishableKey:'sb_publishable_KV7NHiEiRgEGJQ8nKZ7ROw_IaNnd596'};
