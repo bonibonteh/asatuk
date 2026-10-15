@@ -55,3 +55,117 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--red);outline-offset
 #admin-project-upload-dialog [role=status]{white-space:pre-wrap;color:#9b4f38}
 .admin-project-cover-preview{margin:10px 0}
 .admin-project-cover-preview img{display:block;max-width:100%;max-height:240px;object-fit:contain;border-radius:8px}
+
+
+/* ASA TUK editorial admin redesign */
+:root{
+ --paper:#f6f4ef;
+ --white:#fffefa;
+ --ink:#25231f;
+ --muted:#777168;
+ --line:#e5dfd5;
+ --red:#a6533c;
+ --green:#31694e;
+ scroll-behavior:smooth;
+}
+body{background:var(--paper);color:var(--ink)}
+#dashboard{background:var(--paper)}
+#dashboard .sidebar{
+ background:#fffefa;color:var(--ink);border-right:1px solid var(--line);
+ box-shadow:8px 0 28px #34291b05;padding:26px 17px;gap:18px;
+}
+#dashboard .sidebar .brand{padding:0 8px 10px;letter-spacing:.04em}
+#dashboard .sidebar .brand img{width:42px;height:42px;object-fit:contain}
+#dashboard .sidebar .brand small{color:var(--muted);font-size:9px;letter-spacing:.15em}
+#dashboard .sidebar>.eyebrow{color:#91887c;padding:0 11px;font-size:10px}
+#dashboard .sidebar nav{gap:5px;padding:0 2px 12px 0;scrollbar-color:#d5cec2 #fffefa}
+#dashboard .sidebar nav button{
+ color:#6e685f;border:0;border-left:3px solid transparent;border-radius:8px;
+ padding:11px 12px;font-size:13px;font-weight:550;min-height:42px;
+}
+#dashboard .sidebar nav button:hover{background:#f7f3ed;color:var(--ink);border-left-color:#d8b5a7}
+#dashboard .sidebar nav button.selected{
+ background:#f4e6de;color:var(--red);border-left-color:var(--red);font-weight:750;
+}
+#dashboard .sidebar>a{color:#756c61;border-top:1px solid var(--line);padding-top:16px;font-weight:650}
+#dashboard .sidebar>a:hover{color:var(--red)}
+#dashboard .main{padding:30px clamp(22px,4vw,58px) 56px}
+#dashboard .main header{
+ position:relative;border-bottom:1px solid var(--line);padding:0 0 22px;margin-bottom:24px;
+}
+#dashboard .main header .eyebrow{letter-spacing:.16em}
+#dashboard .main header h1{font-size:clamp(32px,3.4vw,44px);line-height:1.08;letter-spacing:-.055em}
+#dashboard .main header h1 span{color:var(--red)}
+#dashboard .user{gap:12px}
+#dashboard .user #who{font-weight:650;color:#5c554c}
+#dashboard .user .secondary{border:1px solid var(--line);border-radius:8px;background:#fffefa;padding:10px 13px}
+#dashboard .intro{max-width:760px;color:var(--muted);margin:0 0 24px;font-size:15px}
+#dashboard .metrics{grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:14px;margin:20px 0 28px}
+#dashboard .metric{
+ position:relative;overflow:hidden;background:var(--white);border:1px solid var(--line);
+ border-radius:12px;padding:20px;box-shadow:0 4px 18px #3a2d1c04;
+}
+#dashboard .metric:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#d7b3a4;opacity:.9}
+#dashboard .metric small{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:#81786d;font-weight:700}
+#dashboard .metric strong{font-size:clamp(27px,2.7vw,34px);font-weight:650;letter-spacing:-.055em;margin-top:13px}
+#dashboard .panel{
+ background:var(--white);border:1px solid var(--line);border-radius:12px;
+ padding:clamp(16px,2vw,23px);margin:16px 0 20px;box-shadow:0 6px 24px #3a2d1c04;
+}
+#dashboard .panel-head{align-items:center;gap:14px}
+#dashboard .panel-head h2{font-size:18px;letter-spacing:-.025em}
+#dashboard .panel-head p{margin:0;max-width:720px;font-size:13px;color:var(--muted)}
+#dashboard .primary,#dashboard .secondary{
+ border-radius:8px;transition:background-color .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+#dashboard .primary{background:var(--red);border:1px solid var(--red);box-shadow:0 3px 8px #a6533c15}
+#dashboard .primary:hover{background:#87412f;box-shadow:0 5px 14px #a6533c20}
+#dashboard .secondary{background:#f4f1eb;border:1px solid #e5dfd5;color:#39352f}
+#dashboard .secondary:hover{background:#ebe5db;border-color:#d4c8b9}
+#dashboard table{border-spacing:0;font-size:13px}
+#dashboard th{padding:13px 12px;background:#f8f6f1;font-size:10px;color:#82796d}
+#dashboard td{padding:14px 12px;border-bottom:1px solid #eee9e1}
+#dashboard tbody tr:hover{background:#fbf8f3}
+#dashboard .pill{border-radius:99px;padding:5px 9px;font-weight:700;letter-spacing:.01em}
+#dashboard input,#dashboard textarea,#dashboard select{
+ border-radius:8px;border-color:#ded7cc;background:#fffefa;
+}
+#dashboard input:focus,#dashboard textarea:focus,#dashboard select:focus{
+ border-color:#b66d58;box-shadow:0 0 0 3px #a6533c14;outline:0;
+}
+#dashboard dialog{
+ border-radius:15px;box-shadow:0 24px 80px #211b1440;padding:clamp(18px,3vw,30px);
+}
+#dashboard dialog::backdrop{background:#201c17a8;backdrop-filter:blur(3px)}
+#dashboard dialog .panel-head{border-bottom:1px solid var(--line);padding-bottom:15px}
+#dashboard dialog h2{font-size:25px;letter-spacing:-.04em}
+#dashboard #notice{margin:12px 0;color:var(--red)}
+#dashboard .table-search{border-radius:8px;max-width:440px}
+#dashboard .gallery-admin-thumb{border-radius:7px}
+#dashboard #admin-project-upload-dialog{background:#fffefa;border-radius:16px}
+#dashboard #admin-project-upload-dialog .panel-head{border-bottom:1px solid var(--line);padding-bottom:15px}
+#dashboard .empty{padding:28px 8px;color:var(--muted);text-align:center}
+#dashboard a{transition:color .18s ease}
+@media(max-width:850px){
+ #dashboard .sidebar{box-shadow:none;border-right:0;border-bottom:1px solid var(--line);padding:12px 14px}
+ #dashboard .sidebar .brand{padding:0 3px 6px}
+ #dashboard .sidebar nav{gap:5px;scrollbar-width:thin}
+ #dashboard .sidebar nav button{border:1px solid transparent;border-radius:8px}
+ #dashboard .sidebar nav button.selected{border:1px solid #e6cfc5}
+ #dashboard .sidebar>a{border-top:0;padding:6px 0 0}
+ #dashboard .main{padding:22px 16px 40px}
+ #dashboard .main header{margin-bottom:20px}
+ #dashboard .panel-head{align-items:flex-start}
+}
+@media(max-width:520px){
+ #dashboard .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #dashboard .metric{padding:14px}
+ #dashboard .metric strong{font-size:26px}
+ #dashboard .main header h1{font-size:31px}
+ #dashboard .user{align-items:flex-start}
+ #dashboard .panel{padding:13px;border-radius:10px}
+ #dashboard .panel-head{flex-wrap:wrap}
+ #dashboard .panel-head>div{max-width:100%}
+ #dashboard .main .view>.panel-head{gap:10px}
+}
+@media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}}
