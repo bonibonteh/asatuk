@@ -602,3 +602,40 @@ section{padding:clamp(64px,8vw,112px) 0}
  .qr-card{grid-template-columns:1fr}
  .post:hover,.ev li:hover{padding-left:0}
 }
+
+
+/* Restore the original bold black Student Hub feature on the homepage */
+.hub-sec .hub-card{
+  background:#050505;
+  color:#fff;
+  border:1px solid #050505;
+  border-radius:0;
+  box-shadow:none;
+  padding:clamp(28px,5vw,56px);
+  grid-template-columns:1.35fr 1fr;
+  gap:36px;
+}
+.hub-sec .hub-eyebrow{color:#ffb4a6}
+.hub-sec .hub-card h2{color:#fff;letter-spacing:-.045em}
+.hub-sec .hub-tag{color:#d9503b}
+.hub-sec .hub-card p.hub-txt{color:#d8d8d2}
+.hub-sec .hub-note{color:#a9a9a3}
+.hub-sec .hub-chips{color:#e9e6dc}
+.hub-sec .hub-chips li{background:transparent;border:1px solid #ffffff2b;border-radius:0;color:#e9e6dc}
+.hub-sec .hub-btn{background:#d9503b;color:#fff;border:1px solid #d9503b}
+.hub-sec .hub-btn:hover{background:#b93d2d;border-color:#b93d2d}
+.hub-sec .qr-card{
+  background:transparent;
+  color:var(--k);
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+}
+@media(max-width:860px){
+  .hub-sec .hub-card{grid-template-columns:1fr;padding:30px 22px;gap:26px}
+  .hub-sec .hub-btn{width:100%;justify-content:center}
+  .hub-sec .hub-note{text-align:center}
+}
+@media(max-width:700px){
+  .hub-sec .qr-card{grid-template-columns:1fr;justify-items:center;text-align:center;margin-top:40px;gap:24px}
+}
