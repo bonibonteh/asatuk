@@ -2,6 +2,7 @@
 (function(){
   const init = () => {
     const form = document.getElementById('project-submission-form');
+    const client = window.supabase.createClient(window.ASATUK_SUPABASE.url, window.ASATUK_SUPABASE.publishableKey);
     if (!form) return;
     const dialog = document.getElementById('project-submit-dialog');
     const open = document.getElementById('project-open-form');
@@ -77,7 +78,6 @@
       cover=f;renderCover();say('Cover photo selected.');
     });
     async function upload(file,path){
-      const client=window.supabase;
       if(!client)throw new Error('Supabase client is unavailable.');
       const result=await client.storage.from('project-submissions').upload(path,file,{upsert:false,contentType:file.type});
       if(result.error)throw result.error;
@@ -88,7 +88,7 @@
       e.preventDefault();if(busy)return;
       if(!cover){say('A cover photo is required.');return;}
       if(!form.reportValidity())return;
-      const client=window.supabase;if(!client){say('Connection error. Refresh and try again.');return;}
+      if(!client){say('Connection error. Refresh and try again.');return;}
       busy=true;submit.disabled=true;close.disabled=true;let uploaded=[];
       try{
         const fd=new FormData(form),v=n=>String(fd.get(n)||'').trim();
@@ -115,7 +115,7 @@
         document.querySelector('.project-submit-intro').append(notice);
       }catch(err){
         say('Submission failed: '+(err.message||'Please try again.'));
-        for(const path of uploaded){try{await window.supabase.storage.from('project-submissions').remove([path]);}catch(cleanupError){console.warn(cleanupError);}}
+        for(const path of uploaded){try{await client.storage.from('project-submissions').remove([path]);}catch(cleanupError){console.warn(cleanupError);}}
       }finally{busy=false;submit.disabled=false;close.disabled=false;}
     });
   }
