@@ -364,3 +364,27 @@ h1,h2,.lede,.sp-lead{text-wrap:balance}
 @media (max-width:1240px){.nj{padding:15px 18px;min-height:46px}}
 /* mobile menu: the search box spans the menu like the buttons above it */
 @media (max-width:1240px){.srch{margin-left:0;width:100%}}
+
+
+/* Collaboration CTA: dark blue for clear, consistent emphasis */
+body:has(a[href="#partner-form"]) .ctas > .btn,
+body:has(#partner-form) #partner-form button[type="submit"],
+body:has(a[href="#partner-form"]) .ctas .btn.w,
+body:has(a[href="#partner-form"]) .ctas .btn.ow{
+  background:#12345a;
+  color:#ffffff;
+  border:1px solid #12345a;
+}
+body:has(a[href="#partner-form"]) .ctas > .btn:hover,
+body:has(#partner-form) #partner-form button[type="submit"]:hover,
+body:has(a[href="#partner-form"]) .ctas .btn.w:hover,
+body:has(a[href="#partner-form"]) .ctas .btn.ow:hover{
+  background:#0b2542;
+  border-color:#0b2542;
+  color:#ffffff;
+}
+body:has(a[href="#partner-form"]) .ctas > .btn:focus-visible,
+body:has(#partner-form) #partner-form button[type="submit"]:focus-visible{
+  outline:3px solid #8ab4e0;
+  outline-offset:3px;
+}
