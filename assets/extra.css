@@ -366,25 +366,25 @@ h1,h2,.lede,.sp-lead{text-wrap:balance}
 @media (max-width:1240px){.srch{margin-left:0;width:100%}}
 
 
-/* Collaboration CTA: dark blue for clear, consistent emphasis */
+/* Collaboration CTA: black for a consistent site-wide style */
 body:has(a[href="#partner-form"]) .ctas > .btn,
 body:has(#partner-form) #partner-form button[type="submit"],
 body:has(a[href="#partner-form"]) .ctas .btn.w,
 body:has(a[href="#partner-form"]) .ctas .btn.ow{
-  background:#12345a;
+  background:#050505;
   color:#ffffff;
-  border:1px solid #12345a;
+  border:1px solid #050505;
 }
 body:has(a[href="#partner-form"]) .ctas > .btn:hover,
 body:has(#partner-form) #partner-form button[type="submit"]:hover,
 body:has(a[href="#partner-form"]) .ctas .btn.w:hover,
 body:has(a[href="#partner-form"]) .ctas .btn.ow:hover{
-  background:#0b2542;
-  border-color:#0b2542;
+  background:#262626;
+  border-color:#262626;
   color:#ffffff;
 }
 body:has(a[href="#partner-form"]) .ctas > .btn:focus-visible,
 body:has(#partner-form) #partner-form button[type="submit"]:focus-visible{
-  outline:3px solid #8ab4e0;
+  outline:3px solid #888888;
   outline-offset:3px;
 }
