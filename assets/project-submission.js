@@ -83,3 +83,41 @@
       if(result.error)throw result.error;
       return {name:file.name,size:file.size,type:file.type,path:result.data.path,url:client.storage.from('project-submissions').getPublicUrl(result.data.path).data.publicUrl};
     }
+
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();if(busy)return;
+      if(!cover){say('A cover photo is required.');return;}
+      if(!form.reportValidity())return;
+      const client=window.supabase;if(!client){say('Connection error. Refresh and try again.');return;}
+      busy=true;submit.disabled=true;close.disabled=true;let uploaded=[];
+      try{
+        const fd=new FormData(form),v=n=>String(fd.get(n)||'').trim();
+        const key=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+        say('Uploading cover photo…');
+        const cm=await upload(cover,'incoming/'+key+'/cover-'+cover.name.replace(/[^a-zA-Z0-9._-]/g,'_'));
+        uploaded.push(cm.path);const attachments=[];
+        for(let i=0;i<files.length;i++){
+          say('Uploading attachment '+(i+1)+' of '+files.length+'…');
+          const m=await upload(files[i],'incoming/'+key+'/file-'+i+'-'+files[i].name.replace(/[^a-zA-Z0-9._-]/g,'_'));
+          uploaded.push(m.path);attachments.push(m);
+        }
+        say('Saving submission…');
+        const result=await client.from('project_submissions').insert({
+          title:v('title'),summary:v('summary'),description:v('description'),category:v('category'),
+          cover_image_url:cm.url,cover_photo_url:cm.url,project_url:'',attachment_files:attachments,
+          submitter_name:v('submitter_name'),submitter_email:v('submitter_email'),programme:v('programme'),
+          status:'pending',admin_notes:'',reviewed_by:null,reviewed_at:null
+        });
+        if(result.error)throw result.error;
+        form.reset();cover=null;files=[];renderCover();renderFiles();dialog.close();
+        const notice=document.createElement('p');notice.className='project-submit-success';notice.setAttribute('role','status');
+        notice.textContent='Project submitted successfully. Your files are saved and ASA TUK will review it before publication.';
+        document.querySelector('.project-submit-intro').append(notice);
+      }catch(err){
+        say('Submission failed: '+(err.message||'Please try again.'));
+        for(const path of uploaded){try{await window.supabase.storage.from('project-submissions').remove([path]);}catch(cleanupError){console.warn(cleanupError);}}
+      }finally{busy=false;submit.disabled=false;close.disabled=false;}
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
