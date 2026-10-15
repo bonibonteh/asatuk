@@ -43,3 +43,15 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--red);outline-offset
  #dashboard .main .panel-head{align-items:flex-start;flex-wrap:wrap}
  #dashboard .field-row{grid-template-columns:minmax(0,1fr)}
 }
+
+/* Admin direct project uploader */
+#admin-project-upload-dialog{width:min(760px,calc(100vw - 24px));max-height:90dvh;overflow:auto;padding:clamp(16px,3vw,28px);border:1px solid #ded8ce;border-radius:14px;background:#f8f6f1;color:#24211d}
+#admin-project-upload-dialog::backdrop{background:#171613aa;backdrop-filter:blur(3px)}
+#admin-project-upload-dialog form>label{display:block;margin:14px 0;font-weight:600}
+#admin-project-upload-dialog input:not([type=file]),#admin-project-upload-dialog select,#admin-project-upload-dialog textarea{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:11px;border:1px solid #d8d0c5;border-radius:7px;background:#fffefa;color:#24211d;font:inherit;font-weight:400}
+#admin-project-upload-dialog input[type=file]{display:block;max-width:100%;margin-top:8px;font:inherit;font-weight:400}
+#admin-project-upload-dialog .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#admin-project-upload-dialog h2{margin:.25rem 0}
+#admin-project-upload-dialog [role=status]{white-space:pre-wrap;color:#9b4f38}
+.admin-project-cover-preview{margin:10px 0}
+.admin-project-cover-preview img{display:block;max-width:100%;max-height:240px;object-fit:contain;border-radius:8px}
