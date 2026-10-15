@@ -408,3 +408,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .navbar .collab-nav:hover,.navbar .collab-nav:focus-visible,.navbar .collab-nav[aria-current="page"]{background:#22231f!important;color:#fff!important;border-color:#22231f}
 .navbar .collab-nav:after{display:none}
 .navbar .collab-nav:focus-visible{outline:2px solid #d9503b;outline-offset:3px}
+
+
+/* Project-card cover fallback: keeps the grid intentional when no image is uploaded or a URL fails. */
+.project-media-fallback{display:block;min-height:150px;background:#e6e3da}
+.project-cover-fallback{width:100%;height:100%;min-height:150px;aspect-ratio:5/3;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:clamp(16px,3vw,28px);background:linear-gradient(135deg,#e8e4da 0%,#d8d2c5 55%,#c7c0b2 100%);color:#20211e;overflow:hidden;position:relative}
+.project-cover-fallback:before,.project-cover-fallback:after{content:"";position:absolute;border:1px solid rgba(32,33,30,.25);transform:rotate(-18deg);pointer-events:none}
+.project-cover-fallback:before{width:75%;height:120%;right:-12%;top:-35%}
+.project-cover-fallback:after{width:48%;height:120%;right:8%;top:-35%}
+.project-fallback-mark{font-size:clamp(26px,4vw,48px);font-weight:600;line-height:.82;letter-spacing:-.08em;position:relative;z-index:1}
+.project-fallback-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;position:relative;z-index:1}
