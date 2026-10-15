@@ -2,7 +2,7 @@
 (function(){
   const init = () => {
     const form = document.getElementById('project-submission-form');
-    const client = window.supabase.createClient(window.ASATUK_SUPABASE.url, window.ASATUK_SUPABASE.publishableKey);
+    let client = null;
     if (!form) return;
     const dialog = document.getElementById('project-submit-dialog');
     const open = document.getElementById('project-open-form');
