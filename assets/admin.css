@@ -169,3 +169,31 @@ body{background:var(--paper);color:var(--ink)}
  #dashboard .main .view>.panel-head{gap:10px}
 }
 @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}}
+
+
+/* Grouped navigation and overview quick actions */
+#dashboard .sidebar nav .nav-group-label{
+ padding:13px 12px 4px;color:#9a9083;font-size:9px;font-weight:800;
+ letter-spacing:.16em;line-height:1.3;text-transform:uppercase;
+}
+#dashboard .sidebar nav .nav-group-label:not(:first-child){margin-top:5px;border-top:1px solid #f0ece5;padding-top:14px}
+#dashboard .overview-welcome{
+ display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+ padding:4px 0 8px;margin-bottom:18px;
+}
+#dashboard .overview-welcome h2{font-size:clamp(25px,3vw,34px);letter-spacing:-.045em;line-height:1.1;margin:5px 0 8px}
+#dashboard .overview-welcome .intro{margin:0;max-width:650px}
+#dashboard .overview-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+#dashboard .overview-actions button{white-space:nowrap}
+#dashboard #view-overview .panel-head .eyebrow{margin:0 0 5px}
+#dashboard #view-overview .panel-head h2{margin:0}
+@media(max-width:850px){
+ #dashboard .sidebar nav .nav-group-label{align-self:center;white-space:nowrap;padding:8px 3px 8px 8px}
+ #dashboard .sidebar nav .nav-group-label:not(:first-child){margin-top:0;border-top:0;border-left:1px solid #e5dfd5;padding-top:8px}
+ #dashboard .overview-welcome{align-items:flex-start;flex-direction:column;gap:16px}
+ #dashboard .overview-actions{justify-content:flex-start}
+}
+@media(max-width:520px){
+ #dashboard .overview-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+ #dashboard .overview-actions button:first-child{grid-column:1/-1}
+}
