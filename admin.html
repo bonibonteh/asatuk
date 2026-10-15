@@ -6,7 +6,7 @@
 <section id="view-events" class="view" hidden><div class="panel-head"><p>Publish activities, site visits and association events.</p><button class="primary" data-new="events">＋ New event</button></div><div class="panel"><div id="events-table"></div></div></section>
 <section id="view-gallery_collections" class="view" hidden><div class="panel-head"><p>Create event-based photo collections. Upload a cover and select multiple photographs; publish when the collection is ready.</p><button class="primary" data-new="gallery_collections">＋ New gallery collection</button></div><div class="panel"><div id="gallery_collections-table"></div></div></section>
 <section id="view-leadership_profiles" class="view" hidden><div class="panel-head"><p>Manage council names, roles, dockets, chapters and profile photos. Use the approved ASA TUK structure and names.</p><button class="primary" data-new="leadership_profiles">＋ Add leader</button></div><div class="panel"><div id="leadership_profiles-table"></div></div></section>
-<section id="view-project_submissions" class="view" hidden><div class="panel-head"><p>Review student work before it appears publicly.</p><button class="secondary" data-refresh-project-submissions>Refresh submissions</button></div><div class="panel"><div id="project_submissions-table"></div></div></section><section id="view-projects" class="view" hidden><div class="panel-head"><p>Manage published student projects and project summaries.</p><button class="primary" data-new="projects">＋ New project</button></div><div class="panel"><div id="projects-table"></div></div></section>
+<section id="view-project_submissions" class="view" hidden><div class="panel-head"><p>Review student work before it appears publicly.</p><button class="secondary" data-refresh-project-submissions>Refresh submissions</button></div><div class="panel"><div id="project_submissions-table"></div></div></section><section id="view-projects" class="view" hidden><div class="panel-head"><p>Manage published student projects and project summaries.</p><button class="secondary" id="admin-project-upload-open">＋ Upload project with files</button> <button class="primary" data-new="projects">＋ New project</button></div><div class="panel"><div id="projects-table"></div></div></section>
 <section id="view-announcements" class="view" hidden><div class="panel-head"><p>Share official ASA TUK updates with students.</p><button class="primary" data-new="announcements">＋ New announcement</button></div><div class="panel"><div id="announcements-table"></div></div></section>
 <section id="view-opportunities" class="view" hidden><div class="panel-head"><p>Manage internships, calls, competitions and openings.</p><button class="primary" data-new="opportunities">＋ New opportunity</button></div><div class="panel"><div id="opportunities-table"></div></div></section>
 <section id="view-learning_resources" class="view" hidden><div class="panel-head"><p>Add past papers and revision materials. Publish them to make them visible in the Student Hub.</p><div><button class="primary" data-new="learning_resources" data-resource-type="exam">＋ Add exam paper</button> <button class="primary" data-new="learning_resources" data-resource-type="revision">＋ Add revision material</button></div></div><div class="panel"><div id="learning_resources-table"></div></div></section>
@@ -29,5 +29,23 @@
 <p class="small">Uploads start as <b>Pending verification</b>. They do not become official until an authorised administrator verifies them. Choose a PDF or provide an HTTPS link, not both.</p>
 <p id="timetable-form-msg" role="status"></p>
 <div class="panel-head"><button type="button" id="timetable-cancel" class="secondary">Cancel</button><button class="primary" id="timetable-submit">Submit for verification</button></div>
+</form></dialog>
+
+<dialog id="admin-project-upload-dialog" class="admin-project-upload-dialog">
+<form id="admin-project-upload-form">
+<div class="panel-head"><div><p class="eyebrow">ASA TUK · Project publishing</p><h2>Upload a project</h2></div><button type="button" class="secondary" id="admin-project-upload-close">Close ×</button></div>
+<p class="small">Add a cover image and project files. Save as draft or publish directly to the public Projects page.</p>
+<label>Project title<input name="title" required minlength="3" maxlength="180"></label>
+<label>Category<select name="category" required><option value="">Choose category</option><option>Architecture</option><option>Design</option><option>Research</option><option>Competition</option><option>Community project</option><option>Urban & Regional Planning</option><option>Other</option></select></label>
+<label>Short summary<textarea name="summary" required minlength="10" maxlength="500" rows="3"></textarea></label>
+<label>Full project description<textarea name="description" required minlength="20" maxlength="12000" rows="5"></textarea></label>
+<label>Project link (optional)<input name="project_url" type="url" placeholder="https://"></label>
+<label>Cover photo (required · JPG, PNG or WebP, max 10 MB)<input id="admin-project-cover" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" required></label>
+<div id="admin-project-cover-preview" class="admin-project-cover-preview"></div>
+<label>Project attachments (PDF, JPG, PNG or WebP; max 20 files, 20 MB each, 100 MB total)<input id="admin-project-files" type="file" accept="application/pdf,image/jpeg,image/png,image/webp,.pdf,.jpg,.jpeg,.png,.webp" multiple></label>
+<div id="admin-project-files-list" class="small"></div>
+<label>Publication status<select name="status"><option value="draft">Save as draft</option><option value="published">Publish now</option></select></label>
+<p id="admin-project-upload-message" role="status" aria-live="polite"></p>
+<div class="panel-head"><button type="button" class="secondary" id="admin-project-upload-cancel">Cancel</button><button type="submit" class="primary">Save project</button></div>
 </form></dialog>
 </body></html>
