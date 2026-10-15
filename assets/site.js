@@ -82,17 +82,7 @@ var navList=document.querySelector('.navbar ul, nav ul');
 var existingAdmin=document.querySelector('nav a[href="admin.html"]');if(existingAdmin){existingAdmin.classList.add('admin-nav')}else if(navList){var item=document.createElement('li'),link=document.createElement('a');link.href='admin.html';link.textContent='Admin Portal';link.className='admin-nav';link.setAttribute('aria-label','Open the ASA TUK staff admin portal');item.appendChild(link);navList.appendChild(item)}
 /* Keep exactly one Admin Portal link in the navigation, even if a page template already includes one. */
 var adminLinks=document.querySelectorAll('nav a[href="admin.html"]');for(var ai=1;ai<adminLinks.length;ai++){adminLinks[ai].remove()}
-var f=document.querySelector('footer .wrap');
-if(f){
-  f.appendChild(build('',false));
-  if(!f.querySelector('a[href="admin.html"]')){
-    var admin=document.createElement('a');
-    admin.href='admin.html';admin.className='admin-nav';
-    admin.textContent='Admin Portal';
-    admin.setAttribute('aria-label','Open the ASA TUK staff admin portal');
-    f.appendChild(admin);
-  }
-}
+/* Admin Portal is intentionally offered once in the primary navigation, not repeated in the footer. */
 var c=document.querySelector('#cf');
 if(c){var col=c.parentNode.firstElementChild;if(col)col.appendChild(build('soc-c',true))}
 })();
