@@ -53,7 +53,7 @@
     }
     function addFiles(incoming){
       for(const f of incoming){
-        if(!(image(f)||f.type==='application/pdf'||/\.pdf$/i.test(f.name)){say('Only PDF, JPG, PNG and WebP files are accepted.');continue;}
+        if(!(image(f)||f.type==='application/pdf'||/\.pdf$/i.test(f.name))){say('Only PDF, JPG, PNG and WebP files are accepted.');continue;}
         if(f.size>20971520){say(f.name+' exceeds 20 MB.');continue;}
         if(files.length>=20){say('Maximum 20 attachments.');break;}
         if(files.reduce((n,x)=>n+x.size,0)+f.size>104857600){say('Attachments are limited to 100 MB total.');break;}
@@ -88,7 +88,7 @@
       e.preventDefault();if(busy)return;
       if(!cover){say('A cover photo is required.');return;}
       if(!form.reportValidity())return;
-      if(!client){say('Connection error. Refresh and try again.');return;}
+      if(!window.supabase?.createClient||!window.ASATUK_SUPABASE?.url||!window.ASATUK_SUPABASE?.publishableKey){say('Connection error. Refresh and try again.');return;} if(!client) client=window.supabase.createClient(window.ASATUK_SUPABASE.url,window.ASATUK_SUPABASE.publishableKey);
       busy=true;submit.disabled=true;close.disabled=true;let uploaded=[];
       try{
         const fd=new FormData(form),v=n=>String(fd.get(n)||'').trim();
