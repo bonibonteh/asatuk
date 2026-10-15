@@ -401,3 +401,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 @media(max-width:750px){.gallery-viewer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.gallery-photo img{height:clamp(170px,38vw,290px)}}
 @media(max-width:480px){.gallery-viewer-grid{grid-template-columns:1fr}.gallery-photo img{height:auto;max-height:440px}.gallery-lightbox{grid-template-columns:36px minmax(0,1fr) 36px;gap:5px;padding:7px}.gallery-prev,.gallery-next{width:36px;height:40px}}
 @media(prefers-reduced-motion:reduce){.gallery-photo img{transition:none!important}}
+
+
+/* Shared dark treatment for Collaborate navigation; retain red for Admin Portal. */
+.navbar .collab-nav,.navbar .collab-nav:visited{background:#050505!important;color:#fff!important;padding:10px 14px;border:1px solid #050505}
+.navbar .collab-nav:hover,.navbar .collab-nav:focus-visible,.navbar .collab-nav[aria-current="page"]{background:#22231f!important;color:#fff!important;border-color:#22231f}
+.navbar .collab-nav:after{display:none}
+.navbar .collab-nav:focus-visible{outline:2px solid #d9503b;outline-offset:3px}
