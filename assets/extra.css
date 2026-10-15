@@ -418,3 +418,18 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .project-cover-fallback:after{width:48%;height:120%;right:8%;top:-35%}
 .project-fallback-mark{font-size:clamp(26px,4vw,48px);font-weight:600;line-height:.82;letter-spacing:-.08em;position:relative;z-index:1}
 .project-fallback-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;position:relative;z-index:1}
+
+/* ASA TUK project submission modal */
+.project-submit-intro{padding:clamp(2.5rem,7vw,6rem) 0;text-align:center;max-width:760px;margin:auto}
+.project-submit-intro h2{font-size:clamp(2.3rem,6vw,4.7rem);letter-spacing:-.045em;line-height:1.02;margin:.5rem 0 1rem;color:#171613}
+.project-submit-intro>p:not(.tag){font-size:1.08rem;line-height:1.7;color:#625d55;max-width:600px;margin:0 auto 1.8rem}
+.project-open-form,.project-submit-final{background:#a6533c!important;color:#fff!important;border-color:#a6533c!important}
+.project-submit-dialog{width:min(900px,calc(100% - 24px));max-height:90dvh;overflow:auto;border:1px solid #e5ded5;border-radius:16px;padding:clamp(1rem,4vw,2.5rem);background:#fbf9f5;color:#201e1a;box-shadow:0 24px 90px #17161335}
+.project-submit-dialog::backdrop{background:#181612a8;backdrop-filter:blur(3px)}
+.project-dialog-head{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid #e5ded5;padding-bottom:1.3rem;margin-bottom:1.5rem}
+.project-dialog-head h2{font-size:clamp(1.8rem,4vw,3rem);margin:.2rem 0 .5rem}
+.project-close-form{width:42px;height:42px;border:1px solid #ded5ca;border-radius:50%;background:transparent;font-size:1.7rem;cursor:pointer}
+.project-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.project-form-grid label{display:flex;flex-direction:column;gap:.45rem;font-size:.9rem;font-weight:650}
+.project-form-grid .wide{grid-column:1/-1}
+.project-form-grid input,.project-form-grid select,.project-form-grid textarea{width:100%;box-sizing:border-box;border:1px solid #ddd4c9;border-radius:8px;padding:.85rem;background:#fffefa;color:#211f1b;font:inherit;font-weight:400}
