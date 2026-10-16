@@ -143,7 +143,7 @@ CREATE POLICY "Published merchandise is public" ON public.merchandise_products F
 DROP POLICY IF EXISTS "Council staff view orders" ON public.merchandise_orders;
 CREATE POLICY "Council staff view orders" ON public.merchandise_orders FOR SELECT TO authenticated
  USING (EXISTS(SELECT 1 FROM public.admin_users au WHERE au.user_id=(SELECT auth.uid()) AND au.role='admin')
- OR EXISTS(SELECT 1 FROM public.council_role_assignments ca WHERE ca.user_id=(SELECT auth.uid()) AND ca.is_active AND (ca.can_manage_merchandise OR ca.can_manage_finance OR ca.docket IN ('Executive','Secretariat')))));
+ OR EXISTS(SELECT 1 FROM public.council_role_assignments ca WHERE ca.user_id=(SELECT auth.uid()) AND ca.is_active AND (ca.can_manage_merchandise OR ca.can_manage_finance OR ca.docket IN ('Executive','Secretariat'))));
 DROP POLICY IF EXISTS "Council staff update orders" ON public.merchandise_orders;
 CREATE POLICY "Council staff update orders" ON public.merchandise_orders FOR UPDATE TO authenticated
  USING (EXISTS(SELECT 1 FROM public.admin_users au WHERE au.user_id=(SELECT auth.uid()) AND au.role='admin')
