@@ -197,3 +197,5 @@ body{background:var(--paper);color:var(--ink)}
  #dashboard .overview-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
  #dashboard .overview-actions button:first-child{grid-column:1/-1}
 }
+
+.sidebar .sidebar-link{display:block;padding:10px 12px;margin:3px 0;color:var(--muted);text-decoration:none;font-size:13px;border-radius:2px}.sidebar .sidebar-link:hover{background:#eeece5;color:var(--ink)}
