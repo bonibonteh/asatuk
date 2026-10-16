@@ -154,7 +154,7 @@ DROP POLICY IF EXISTS "Staff view order items" ON public.merchandise_order_items
 CREATE POLICY "Staff view order items" ON public.merchandise_order_items FOR SELECT TO authenticated
  USING (EXISTS(SELECT 1 FROM public.merchandise_orders o WHERE o.id=merchandise_order_items.order_id)
  AND (EXISTS(SELECT 1 FROM public.admin_users au WHERE au.user_id=(SELECT auth.uid()) AND au.role='admin')
- OR EXISTS(SELECT 1 FROM public.council_role_assignments ca WHERE ca.user_id=(SELECT auth.uid()) AND ca.is_active AND (ca.can_manage_merchandise OR ca.can_manage_finance OR ca.docket IN ('Executive','Secretariat'))));
+ OR EXISTS(SELECT 1 FROM public.council_role_assignments ca WHERE ca.user_id=(SELECT auth.uid()) AND ca.is_active AND (ca.can_manage_merchandise OR ca.can_manage_finance OR ca.docket IN ('Executive','Secretariat')))));
 CREATE INDEX IF NOT EXISTS merchandise_order_items_order_id_idx ON public.merchandise_order_items(order_id);
 CREATE INDEX IF NOT EXISTS merchandise_order_items_product_id_idx ON public.merchandise_order_items(product_id);
 CREATE INDEX IF NOT EXISTS merchandise_orders_payment_verified_by_idx ON public.merchandise_orders(payment_verified_by);
