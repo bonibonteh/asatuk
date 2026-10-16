@@ -30,7 +30,7 @@ function renderTable(k){
  $(''+k+'-table').innerHTML=arr.length?'<table><thead><tr>'+cols.map(c=>'<th>'+esc(c.replace('_',' '))+'</th>').join('')+'<th>Actions</th></tr></thead><tbody>'+arr.map(x=>{
   let actions='';
   const effectiveStatus=k==='leadership_profiles'?(x.active?'published':'draft'):x.status;
-  if(canManageContent())actions+='<button class="secondary" data-edit="'+k+'" data-id="'+x.id+'">Edit</button> <button class="secondary" data-toggle="'+k+'" data-id="'+x.id+'">'+(effectiveStatus==='published'?'Unpublish':'Publish')+'</button> ';
+  if(canManageContent(k))actions+='<button class="secondary" data-edit="'+k+'" data-id="'+x.id+'">Edit</button> <button class="secondary" data-toggle="'+k+'" data-id="'+x.id+'">'+(effectiveStatus==='published'?'Unpublish':'Publish')+'</button> ';
   if(k==='gallery_collections'&&role==='admin')actions+='<button class="secondary" data-gallery-photos="'+x.id+'">Photos / preview</button> ';if(role==='admin')actions+='<button class="secondary" data-delete="'+k+'" data-id="'+x.id+'">Delete</button>';
   return '<tr>'+cols.map(c=>'<td>'+((c==='status'||(k==='leadership_profiles'&&c==='active'))?'<span class="pill '+esc(k==='leadership_profiles'?(x.active?'published':'archived'):x[c])+'">'+esc(k==='leadership_profiles'?(x.active?'active':'inactive'):x[c])+'</span>':esc(c.includes('at')||c==='deadline'?stamp(x[c]):x[c]||'—'))+'</td>').join('')+'<td>'+ (actions||'<span class="muted">View only</span>')+'</td></tr>';
  }).join('')+'</tbody></table>':'<p class="empty">No records yet. Use the button above to add one.</p>'
