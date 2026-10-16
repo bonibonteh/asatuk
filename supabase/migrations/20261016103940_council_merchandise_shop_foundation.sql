@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS public.merchandise_products (
  stock_quantity integer NOT NULL DEFAULT 0 CHECK (stock_quantity>=0),
  image_url text NOT NULL DEFAULT '',
  image_path text NOT NULL DEFAULT '',
+ image_urls jsonb NOT NULL DEFAULT '[]'::jsonb,
  options jsonb NOT NULL DEFAULT '[]'::jsonb,
  status text NOT NULL DEFAULT 'draft' CHECK (status IN ('draft','published','archived')),
  featured boolean NOT NULL DEFAULT false,
