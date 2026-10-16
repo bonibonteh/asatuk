@@ -17,6 +17,12 @@
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/extra.css">
+<style>
+/* Keep leadership cards polished when a portrait file is missing or unavailable. */
+.card .photo-fallback{width:100%;aspect-ratio:1/1;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 30% 20%,#4a665d,#1d2b29 72%);color:#f5f1e9;font-family:"Inter Tight",sans-serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:600;letter-spacing:.04em}
+.president-spotlight-photo-link .photo-fallback{width:100%;height:100%;min-height:240px;aspect-ratio:auto;font-size:clamp(3rem,8vw,6rem)}
+.photo-fallback span{border:1px solid #f5f1e966;border-radius:50%;width:1.7em;height:1.7em;display:grid;place-items:center}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -108,5 +114,31 @@ HOW TO UPDATE THE LEADERSHIP PAGE
 <script>window.IDX=[["Home","index.html","Student association for architecture and urban & regional planning students of the Technical University of Kenya"],["About","about.html","Who we are, our mission and vision, studio culture, climate, community, materials"],["Events","events.html","Welcome mixer, portfolio and CV workshop, site visit, exhibition"],["Projects","projects.html","Student research, design competitions, community builds, exhibitions"],["Gallery","gallery.html","Photos of studio, site visits, exhibitions and events"],["News","news.html","Announcements and updates from the committee"],["Leadership","leadership.html","Architecture Chapter Council and Urban & Regional Planning Chapter Council: president Bonface Oino, vice president Joy Too, secretary general Leasebeth Wakla, assistant secretary general Mitchelle Jepkurgat, treasurer Raphael Ndombi, assistant organizing secretary Dennis Mwendwa, public relations secretary Alex Muthui, assistant public relations secretary Enock Tonui, events secretary Samuel Kimanzi, social media strategist Fabian Maina, assistant merchandise secretary Juliet Jepkosgei"],["Join","join.html","Register as a member of ASA TUK, architecture and urban & regional planning students, sign up, membership form"],["FAQ","faq.html","Questions about membership, events, cost, sponsorship and contact"],["Contact","contact.html","Email the committee, collaborate, sponsorship"],["Student Hub","student-hub.html","ASA TUK Student Hub Linktree: resources, forms, events, merchandise, announcements, student links, QR code"],["Sip & Paint","sip-and-paint.html","Paint and sip event, October 2026, photos"],["Collaborate","collaborate.html","Propose a partnership, sponsor an event, support student activities, and collaborate on projects"],["News subscription","news.html#subscribe","Subscribe to ASA TUK news and updates by email, newsletter, you do not need to be a member"]];</script>
 <script src="assets/search.js"></script>
 <script src="assets/site.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/admin-config.js"></script><script src="assets/public-listings.js" defer></script></body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/admin-config.js"></script><script src="assets/public-listings.js" defer></script><script>
+/* Missing portrait files should never appear as broken-image icons. */
+(function(){
+  function initialsFor(alt){
+    const cleaned=(alt||"ASA TUK team member").replace(/,.*$/,"").trim();
+    const words=cleaned.split(/\s+/).filter(Boolean);
+    return (words.length>1?words[0][0]+words[words.length-1][0]:cleaned.slice(0,2)).toUpperCase();
+  }
+  document.querySelectorAll("img.photo, #president-spotlight-photo").forEach(function(img){
+    function useFallback(){
+      if(img.dataset.fallbackApplied==="true") return;
+      img.dataset.fallbackApplied="true";
+      const fallback=document.createElement("div");
+      fallback.className="photo-fallback";
+      fallback.setAttribute("role","img");
+      fallback.setAttribute("aria-label",img.alt||"Leadership portrait unavailable");
+      const initials=document.createElement("span");
+      initials.textContent=initialsFor(img.alt);
+      fallback.appendChild(initials);
+      img.replaceWith(fallback);
+    }
+    img.addEventListener("error",useFallback,{once:true});
+    if(img.complete && img.naturalWidth===0) useFallback();
+  });
+})();
+</script>
+</body>
 </html>
