@@ -6,7 +6,7 @@ create policy "Published gallery collections are public" on public.gallery_colle
 using(status='published' or exists(select 1 from public.admin_users au where au.user_id=(select auth.uid()) and au.role='admin' and not au.is_suspended));
 drop policy if exists "Images of published collections are public" on public.gallery_images;
 create policy "Images of published collections are public" on public.gallery_images for select to anon,authenticated
-using(exists(select 1 from public.gallery_collections gc where gc.id=gallery_images.collection_id and (gc.status='published' or exists(select 1 from public.admin_users au where au.user_id=(select auth.uid()) and au.role='admin' and not au.is_suspended))));
+using(exists(select 1 from public.gallery_collections gc where gc.id=gallery_images.collection_id and (gc.status='published' or (public.asa_account_is_active((select auth.uid())) and exists(select 1 from public.admin_users au where au.user_id=(select auth.uid()) and au.role='admin' and not au.is_suspended)))));
 drop policy if exists "Public can read published opportunities" on public.opportunities;
 create policy "Public can read published opportunities" on public.opportunities for select to anon,authenticated
 using(status='published' or exists(select 1 from public.admin_users au where au.user_id=(select auth.uid()) and au.role='admin' and not au.is_suspended));
