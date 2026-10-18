@@ -34,7 +34,7 @@
       wrap.appendChild(button);
     });
   }
-  function showDenied({rootId='login',formId='login-form',messageId='login-msg',message='You are signed in, but this account is not assigned to this workspace.',links=[]}={}){
+  function showDenied({rootId='login',formId='login-form',messageId='login-msg',message='You are signed in, but this account is not assigned to this workspace.',links=[],retry=null,signOut=true}={}){
     const root=document.getElementById(rootId),form=document.getElementById(formId),msg=document.getElementById(messageId);
     if(form) form.hidden=true;
     const forgot=document.getElementById('forgot');if(forgot)forgot.hidden=true;
@@ -43,6 +43,10 @@
     let panel=root.querySelector('.auth-denied-links');
     if(!panel){panel=document.createElement('div');panel.className='auth-denied-links';panel.style.cssText='display:flex;flex-wrap:wrap;gap:10px;margin-top:14px';root.appendChild(panel)}
     panel.innerHTML=links.map(x=>'<a href="'+String(x.href).replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'" style="display:inline-block;padding:9px 12px;border:1px solid var(--line,#ddd);border-radius:8px;text-decoration:none;color:inherit;font-weight:650">'+String(x.label).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+' ↗</a>').join('');
+    /* A denied user must always have a way out: sign out (this browser only) or retry the check. */
+    const addAction=(label,handler)=>{const b=document.createElement('button');b.type='button';b.className='auth-denied-action';b.textContent=label;b.style.cssText='padding:9px 12px;border:1px solid var(--line,#ddd);border-radius:8px;background:transparent;color:inherit;font:inherit;font-weight:650;cursor:pointer';b.addEventListener('click',async()=>{b.disabled=true;try{await handler()}finally{b.disabled=false}});panel.appendChild(b)};
+    if(typeof retry==='function')addAction('Try again',retry);
+    if(signOut!==false&&window.ASATUKAuth)addAction('Sign out',async()=>{await window.ASATUKAuth.signOut();location.reload()});
   }
   document.addEventListener('DOMContentLoaded',setupPasswordToggles);
   window.ASATUKAuthUI={setupPasswordToggles,showDenied};
