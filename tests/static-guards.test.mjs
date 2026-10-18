@@ -11,7 +11,7 @@ const read = (f) => fs.readFileSync(path.join(SITE_ROOT, f), 'utf8');
 const html = fs.readdirSync(SITE_ROOT).filter((f) => f.endsWith('.html'));
 const assets = fs.readdirSync(path.join(SITE_ROOT, 'assets')).filter((f) => f.endsWith('.js')).map((f) => 'assets/' + f);
 const inline = (src) => [...src.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi)].filter((m) => !/ld\+json/.test(m[1]) && m[2].trim()).map((m) => m[2]);
-const STAFF_PAGES = ['admin.html', 'council-hub.html', 'council-access.html', 'merchandise-admin.html'];
+const STAFF_PAGES = ['admin.html', 'council-hub.html', 'council-access.html', 'merchandise-admin.html', 'treasurer-workspace.html'];
 
 test('every JavaScript file parses (a parse error silently disables a whole page)', () => {
   for (const f of assets) assert.doesNotThrow(() => new vm.Script(read(f), { filename: f }), f);
