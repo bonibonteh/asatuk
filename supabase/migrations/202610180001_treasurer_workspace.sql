@@ -84,7 +84,7 @@ as $$
   select private.asa_account_is_active((select auth.uid()))
   and (
     exists (select 1 from public.admin_users au where au.user_id=(select auth.uid()) and au.role='admin' and not au.is_suspended)
-    or exists (select 1 from public.council_role_assignments ca where ca.user_id=(select auth.uid()) and ca.is_active and ca.can_manage_finance and (lower(ca.role_title) like '%treasurer%' or ca.docket='Executive'))
+    or exists (select 1 from public.council_role_assignments ca where ca.user_id=(select auth.uid()) and ca.is_active and ca.can_manage_finance and (lower(trim(ca.role_title))='treasurer' or ca.docket='Executive'))
   );
 $$;
 
