@@ -43,3 +43,186 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--red);outline-offset
  #dashboard .main .panel-head{align-items:flex-start;flex-wrap:wrap}
  #dashboard .field-row{grid-template-columns:minmax(0,1fr)}
 }
+
+/* Admin direct project uploader */
+#admin-project-upload-dialog{width:min(760px,calc(100vw - 24px));max-height:90dvh;overflow:auto;padding:clamp(16px,3vw,28px);border:1px solid #ded8ce;border-radius:14px;background:#f8f6f1;color:#24211d}
+#admin-project-upload-dialog::backdrop{background:#171613aa;backdrop-filter:blur(3px)}
+#admin-project-upload-dialog form>label{display:block;margin:14px 0;font-weight:600}
+#admin-project-upload-dialog input:not([type=file]),#admin-project-upload-dialog select,#admin-project-upload-dialog textarea{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:11px;border:1px solid #d8d0c5;border-radius:7px;background:#fffefa;color:#24211d;font:inherit;font-weight:400}
+#admin-project-upload-dialog input[type=file]{display:block;max-width:100%;margin-top:8px;font:inherit;font-weight:400}
+#admin-project-upload-dialog .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#admin-project-upload-dialog h2{margin:.25rem 0}
+#admin-project-upload-dialog [role=status]{white-space:pre-wrap;color:#9b4f38}
+.admin-project-cover-preview{margin:10px 0}
+.admin-project-cover-preview img{display:block;max-width:100%;max-height:240px;object-fit:contain;border-radius:8px}
+
+
+/* ASA TUK editorial admin redesign */
+:root{
+ --paper:#f6f4ef;
+ --white:#fffefa;
+ --ink:#25231f;
+ --muted:#777168;
+ --line:#e5dfd5;
+ --red:#a6533c;
+ --green:#31694e;
+ scroll-behavior:smooth;
+}
+body{background:var(--paper);color:var(--ink)}
+#dashboard{background:var(--paper)}
+#dashboard .sidebar{
+ background:#fffefa;color:var(--ink);border-right:1px solid var(--line);
+ box-shadow:8px 0 28px #34291b05;padding:26px 17px;gap:18px;
+}
+#dashboard .sidebar .brand{padding:0 8px 10px;letter-spacing:.04em}
+#dashboard .sidebar .brand img{width:42px;height:42px;object-fit:contain}
+#dashboard .sidebar .brand small{color:var(--muted);font-size:9px;letter-spacing:.15em}
+#dashboard .sidebar>.eyebrow{color:#91887c;padding:0 11px;font-size:10px}
+#dashboard .sidebar nav{gap:5px;padding:0 2px 12px 0;scrollbar-color:#d5cec2 #fffefa}
+#dashboard .sidebar nav button{
+ color:#6e685f;border:0;border-left:3px solid transparent;border-radius:8px;
+ padding:11px 12px;font-size:13px;font-weight:550;min-height:42px;
+}
+#dashboard .sidebar nav button:hover{background:#f7f3ed;color:var(--ink);border-left-color:#d8b5a7}
+#dashboard .sidebar nav button.selected{
+ background:#f4e6de;color:var(--red);border-left-color:var(--red);font-weight:750;
+}
+#dashboard .sidebar>a{color:#756c61;border-top:1px solid var(--line);padding-top:16px;font-weight:650}
+#dashboard .sidebar>a:hover{color:var(--red)}
+#dashboard .main{padding:30px clamp(22px,4vw,58px) 56px}
+#dashboard .main header{
+ position:relative;border-bottom:1px solid var(--line);padding:0 0 22px;margin-bottom:24px;
+}
+#dashboard .main header .eyebrow{letter-spacing:.16em}
+#dashboard .main header h1{font-size:clamp(32px,3.4vw,44px);line-height:1.08;letter-spacing:-.055em}
+#dashboard .main header h1 span{color:var(--red)}
+#dashboard .user{gap:12px}
+#dashboard .user #who{font-weight:650;color:#5c554c}
+#dashboard .user .secondary{border:1px solid var(--line);border-radius:8px;background:#fffefa;padding:10px 13px}
+#dashboard .intro{max-width:760px;color:var(--muted);margin:0 0 24px;font-size:15px}
+#dashboard .metrics{grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:14px;margin:20px 0 28px}
+#dashboard .metric{
+ position:relative;overflow:hidden;background:var(--white);border:1px solid var(--line);
+ border-radius:12px;padding:20px;box-shadow:0 4px 18px #3a2d1c04;
+}
+#dashboard .metric:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#d7b3a4;opacity:.9}
+#dashboard .metric small{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:#81786d;font-weight:700}
+#dashboard .metric strong{font-size:clamp(27px,2.7vw,34px);font-weight:650;letter-spacing:-.055em;margin-top:13px}
+#dashboard .panel{
+ background:var(--white);border:1px solid var(--line);border-radius:12px;
+ padding:clamp(16px,2vw,23px);margin:16px 0 20px;box-shadow:0 6px 24px #3a2d1c04;
+}
+#dashboard .panel-head{align-items:center;gap:14px}
+#dashboard .panel-head h2{font-size:18px;letter-spacing:-.025em}
+#dashboard .panel-head p{margin:0;max-width:720px;font-size:13px;color:var(--muted)}
+#dashboard .primary,#dashboard .secondary{
+ border-radius:8px;transition:background-color .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease;
+}
+#dashboard .primary{background:var(--red);border:1px solid var(--red);box-shadow:0 3px 8px #a6533c15}
+#dashboard .primary:hover{background:#87412f;box-shadow:0 5px 14px #a6533c20}
+#dashboard .secondary{background:#f4f1eb;border:1px solid #e5dfd5;color:#39352f}
+#dashboard .secondary:hover{background:#ebe5db;border-color:#d4c8b9}
+#dashboard table{border-spacing:0;font-size:13px}
+#dashboard th{padding:13px 12px;background:#f8f6f1;font-size:10px;color:#82796d}
+#dashboard td{padding:14px 12px;border-bottom:1px solid #eee9e1}
+#dashboard tbody tr:hover{background:#fbf8f3}
+#dashboard .pill{border-radius:99px;padding:5px 9px;font-weight:700;letter-spacing:.01em}
+#dashboard input,#dashboard textarea,#dashboard select{
+ border-radius:8px;border-color:#ded7cc;background:#fffefa;
+}
+#dashboard input:focus,#dashboard textarea:focus,#dashboard select:focus{
+ border-color:#b66d58;box-shadow:0 0 0 3px #a6533c14;outline:0;
+}
+#dashboard dialog{
+ border-radius:15px;box-shadow:0 24px 80px #211b1440;padding:clamp(18px,3vw,30px);
+}
+#dashboard dialog::backdrop{background:#201c17a8;backdrop-filter:blur(3px)}
+#dashboard dialog .panel-head{border-bottom:1px solid var(--line);padding-bottom:15px}
+#dashboard dialog h2{font-size:25px;letter-spacing:-.04em}
+#dashboard #notice{margin:12px 0;color:var(--red)}
+#dashboard .table-search{border-radius:8px;max-width:440px}
+#dashboard .gallery-admin-thumb{border-radius:7px}
+#dashboard #admin-project-upload-dialog{background:#fffefa;border-radius:16px}
+#dashboard #admin-project-upload-dialog .panel-head{border-bottom:1px solid var(--line);padding-bottom:15px}
+#dashboard .empty{padding:28px 8px;color:var(--muted);text-align:center}
+#dashboard a{transition:color .18s ease}
+@media(max-width:850px){
+ #dashboard .sidebar{box-shadow:none;border-right:0;border-bottom:1px solid var(--line);padding:12px 14px}
+ #dashboard .sidebar .brand{padding:0 3px 6px}
+ #dashboard .sidebar nav{gap:5px;scrollbar-width:thin}
+ #dashboard .sidebar nav button{border:1px solid transparent;border-radius:8px}
+ #dashboard .sidebar nav button.selected{border:1px solid #e6cfc5}
+ #dashboard .sidebar>a{border-top:0;padding:6px 0 0}
+ #dashboard .main{padding:22px 16px 40px}
+ #dashboard .main header{margin-bottom:20px}
+ #dashboard .panel-head{align-items:flex-start}
+}
+@media(max-width:520px){
+ #dashboard .metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #dashboard .metric{padding:14px}
+ #dashboard .metric strong{font-size:26px}
+ #dashboard .main header h1{font-size:31px}
+ #dashboard .user{align-items:flex-start}
+ #dashboard .panel{padding:13px;border-radius:10px}
+ #dashboard .panel-head{flex-wrap:wrap}
+ #dashboard .panel-head>div{max-width:100%}
+ #dashboard .main .view>.panel-head{gap:10px}
+}
+@media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}}
+
+
+/* Grouped navigation and overview quick actions */
+#dashboard .sidebar nav .nav-group-label{
+ padding:13px 12px 4px;color:#9a9083;font-size:9px;font-weight:800;
+ letter-spacing:.16em;line-height:1.3;text-transform:uppercase;
+}
+#dashboard .sidebar nav .nav-group-label:not(:first-child){margin-top:5px;border-top:1px solid #f0ece5;padding-top:14px}
+#dashboard .overview-welcome{
+ display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+ padding:4px 0 8px;margin-bottom:18px;
+}
+#dashboard .overview-welcome h2{font-size:clamp(25px,3vw,34px);letter-spacing:-.045em;line-height:1.1;margin:5px 0 8px}
+#dashboard .overview-welcome .intro{margin:0;max-width:650px}
+#dashboard .overview-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+#dashboard .overview-actions button{white-space:nowrap}
+#dashboard #view-overview .panel-head .eyebrow{margin:0 0 5px}
+#dashboard #view-overview .panel-head h2{margin:0}
+@media(max-width:850px){
+ #dashboard .sidebar nav .nav-group-label{align-self:center;white-space:nowrap;padding:8px 3px 8px 8px}
+ #dashboard .sidebar nav .nav-group-label:not(:first-child){margin-top:0;border-top:0;border-left:1px solid #e5dfd5;padding-top:8px}
+ #dashboard .overview-welcome{align-items:flex-start;flex-direction:column;gap:16px}
+ #dashboard .overview-actions{justify-content:flex-start}
+}
+@media(max-width:520px){
+ #dashboard .overview-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+ #dashboard .overview-actions button:first-child{grid-column:1/-1}
+}
+
+.sidebar .sidebar-link{display:block;padding:10px 12px;margin:3px 0;color:var(--muted);text-decoration:none;font-size:13px;border-radius:2px}.sidebar .sidebar-link:hover{background:#eeece5;color:var(--ink)}
+
+/* Personalised council welcome and profile editor */
+#dashboard .overview-welcome{align-items:flex-start;padding:20px 22px 22px;border:1px solid #e5dfd5;border-radius:16px;background:radial-gradient(ellipse at 92% 0%,#f0e3d2 0,transparent 45%),linear-gradient(135deg,#fffefa,#f8f4ec);box-shadow:0 12px 32px #3a2d1c08;animation:welcome-rise .55s cubic-bezier(.2,.7,.2,1) both}
+#dashboard .welcome-copy{min-width:0;flex:1}
+#dashboard .welcome-identity{display:flex;align-items:center;gap:16px;margin:12px 0}
+#dashboard .welcome-identity h2{margin:0 0 7px}
+#dashboard .welcome-sparkle{display:inline-block;color:#b18a45;animation:sparkle-pulse 2.8s ease-in-out infinite}
+#dashboard .welcome-message{color:#766b5d;font-size:14px;line-height:1.6;margin:0;overflow-wrap:anywhere}
+#dashboard .profile-avatar{position:relative;display:grid;place-items:center;flex:0 0 76px;width:76px;height:76px;overflow:hidden;border-radius:50%;background:#eee3d5;color:#8e533d;font-size:22px;font-weight:800;border:2px solid #c4a36c;box-shadow:0 0 0 5px #c4a36c20;animation:avatar-in .65s ease-out both}
+#dashboard .profile-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#dashboard .header-avatar{width:34px;height:34px;object-fit:cover;border-radius:50%;border:1.5px solid #c4a36c;box-shadow:0 0 0 3px #c4a36c20}
+#dashboard .personal-reminder{display:inline-block;margin:14px 0 0;padding:10px 13px;border-left:3px solid #c4a36c;background:#f6efe4;color:#5b5145;font-size:13px;border-radius:0 8px 8px 0;overflow-wrap:anywhere}
+#dashboard .profile-open{margin-top:15px}
+#dashboard .profile-editor{animation:welcome-rise .25s ease-out both}
+#dashboard .profile-form-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px}
+#dashboard .profile-form-grid label{display:block;font-size:13px;font-weight:700;margin:12px 0}
+#dashboard .profile-form-grid label .small{font-weight:400}
+#dashboard #profile-photo{font-size:12px;padding:10px}
+#dashboard .remove-photo{margin-top:4px;font-size:12px}
+#dashboard .profile-form-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+#dashboard #profile-message{font-size:13px;color:var(--red);white-space:pre-wrap}
+#dashboard #profile-message.profile-success{color:#31694e}
+@keyframes welcome-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes avatar-in{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes sparkle-pulse{0%,100%{opacity:.6;transform:scale(.92) rotate(-8deg)}50%{opacity:1;transform:scale(1.12) rotate(8deg)}}
+@media(max-width:600px){#dashboard .overview-welcome{padding:16px}#dashboard .welcome-identity{align-items:flex-start;gap:12px}#dashboard .profile-avatar{width:60px;height:60px;flex-basis:60px;font-size:18px}#dashboard .profile-form-grid{grid-template-columns:1fr}#dashboard .header-avatar{width:30px;height:30px}}
+@media(prefers-reduced-motion:reduce){#dashboard .overview-welcome,#dashboard .profile-editor,#dashboard .profile-avatar,#dashboard .welcome-sparkle{animation:none!important}}

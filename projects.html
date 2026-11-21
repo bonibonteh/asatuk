@@ -30,7 +30,7 @@
 <li><a href="index.html">Home</a></li>
 <li><a href="about.html">About</a></li><li><a href="events.html">Events</a></li><li><a href="projects.html">Projects</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="news.html">News</a></li><li><a href="leadership.html">Leadership</a></li><li><a class="collab-nav" href="collaborate.html">Collaborate</a></li>
 </ul>
-<a class="hub-nav" href="student-hub.html" aria-label="ASA TUK Student Hub">Student Hub</a><a class="btn nj" href="admin.html">Admin Portal</a>
+<a class="hub-nav" href="student-hub.html" aria-label="ASA TUK Student Hub">Student Hub</a>
 <div class="srch" role="search"><input id="q" type="search" placeholder="Search (press /)" aria-label="Search the site" autocomplete="off" aria-controls="res"><div id="res" role="listbox" aria-live="polite"></div></div>
 </div>
 </nav>
@@ -42,6 +42,32 @@
 <div class="head"><p>Published student research, design work, competitions and community projects from ASA TUK. Only projects published by the committee appear here.</p></div>
 <div class="cards" id="projects-grid"><p id="projects-status" class="evnote" role="status">Loading published projects…</p></div>
 </div></section>
+<section class="paper project-submit-section" id="submit-project">
+<div class="wrap project-submit-wrap">
+<div class="project-submit-intro"><p class="tag">ASA TUK · Student work</p><h2>Have a project to share?</h2><p>Submit your architecture, design, research, or community project for review by ASA TUK.</p><button class="btn project-open-form" type="button" id="project-open-form">Submit a Project +</button></div>
+<dialog id="project-submit-dialog" class="project-submit-dialog" aria-labelledby="project-submit-title">
+<div class="project-dialog-head"><div><p class="tag">Project submission</p><h2 id="project-submit-title">Tell us about your work.</h2><p>Your project stays private until ASA TUK reviews it.</p></div><button type="button" class="project-close-form" id="project-close-form" aria-label="Close form">×</button></div>
+<form id="project-submission-form" class="project-submit-form">
+<div class="project-form-grid">
+<label>Full name *<input name="submitter_name" required minlength="2" maxlength="100" autocomplete="name"></label>
+<label>Email address *<input name="submitter_email" type="email" required maxlength="180" autocomplete="email"></label>
+<label class="wide">Project title *<input name="title" required minlength="3" maxlength="180"></label>
+<label>Project category *<select name="category" required><option value="">Choose category</option><option>Architecture</option><option>Design</option><option>Research</option><option>Competition</option><option>Community project</option><option>Urban & Regional Planning</option><option>Other</option></select></label>
+<label>Short project summary *<textarea name="summary" required minlength="10" maxlength="500" rows="3"></textarea></label>
+<label class="wide">Full project description *<textarea name="description" required minlength="20" maxlength="12000" rows="5" placeholder="Describe the idea, process, purpose and outcome."></textarea></label>
+<label class="wide">Programme / course<input name="programme" maxlength="100" placeholder="e.g. Architecture"></label>
+</div>
+<section class="upload-section"><div class="upload-section-heading"><div><p class="tag">01 · Required</p><h3>Cover Photo</h3><p>Your main project thumbnail.</p></div><span class="upload-required">Required</span></div>
+<input id="project-cover-input" class="visually-hidden-file" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" required>
+<label for="project-cover-input" id="project-cover-drop" class="project-dropzone cover-dropzone"><span class="drop-icon">↑</span><strong>Upload your project cover photo</strong><span>JPG, JPEG, PNG or WebP · up to 10 MB</span><span class="btn project-file-button">Choose image</span></label><div id="project-cover-preview" class="project-cover-preview" hidden></div>
+</section>
+<section class="upload-section"><div class="upload-section-heading"><div><p class="tag">02 · Optional</p><h3>Project attachments</h3><p>Add portfolios, drawings, presentations and extra images.</p></div><span class="upload-count" id="project-file-count">0 / 20 files</span></div>
+<input id="project-attachments-input" class="visually-hidden-file" type="file" accept="application/pdf,image/jpeg,image/png,image/webp,.pdf,.jpg,.jpeg,.png,.webp" multiple>
+<div id="project-attachments-drop" class="project-dropzone"><span class="drop-icon">＋</span><strong>Drop your files here</strong><span>PDF, JPG, PNG or WebP · 20 files max · 20 MB each · 100 MB total</span><label for="project-attachments-input" class="btn project-file-button">Choose files</label><button type="button" id="project-add-files" class="text-button">Add more files</button></div><div id="project-attachment-list" class="project-attachment-list"></div><p class="upload-help">Cover photo and attachments are stored separately.</p>
+</section>
+<div class="project-submit-footer"><p id="project-submit-message" role="status" aria-live="polite"></p><button class="btn project-submit-final" type="submit">Submit Project ↗</button></div>
+</form></dialog></div></section>
+<dialog id="project-detail-dialog" class="project-detail-dialog"><button type="button" id="project-detail-close" class="btn">Close ×</button><div id="project-detail-content"></div></dialog>
 <section class="paper hub-sec" aria-label="ASA TUK Student Hub"><div class="wrap"><a class="hub-strip" href="student-hub.html" target="_blank" rel="noopener noreferrer" aria-label="ACCESS STUDENT HUB (opens in a new tab)"><span class="hs-l"><span class="hs-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg></span><span><b>ASA TUK Student Hub</b><small>All your ASA TUK links in one place: resources, forms, events, merch and announcements.</small></span></span><span class="hs-b">Access Student Hub <i>&rarr;</i></span></a></div></section>
 </main>
 <footer class="dark"><div class="wrap"><div class="fl"><img src="assets/logo.png" alt="ASA TUK logo" width="56" height="56">ASA TUK, Architecture Student Association, Technical University of Kenya, Nairobi.</div>
@@ -50,5 +76,5 @@
 <script>window.IDX=[["Home","index.html","Student association for architecture and urban & regional planning students of the Technical University of Kenya"],["About","about.html","Who we are, our mission and vision, studio culture, climate, community, materials"],["Events","events.html","Welcome mixer, portfolio and CV workshop, site visit, exhibition"],["Projects","projects.html","Student research, design competitions, community builds, exhibitions"],["Gallery","gallery.html","Photos of studio, site visits, exhibitions and events"],["News","news.html","Announcements and updates from the committee"],["Leadership","leadership.html","Architecture Chapter Council and Urban & Regional Planning Chapter Council: president Bonface Oino, vice president Joy Too, secretary general Leasebeth Wakla, assistant secretary general Mitchelle Jepkurgat, treasurer Raphael Ndombi, assistant organizing secretary Dennis Mwendwa, public relations secretary Alex Muthui, assistant public relations secretary Enock Tonui, events secretary Samuel Kimanzi, social media strategist Fabian Maina, assistant merchandise secretary Juliet Jepkosgei"],["Join","join.html","Register as a member of ASA TUK, architecture and urban & regional planning students, sign up, membership form"],["FAQ","faq.html","Questions about membership, events, cost, sponsorship and contact"],["Contact","contact.html","Email the committee, collaborate, sponsorship"],["Student Hub","student-hub.html","ASA TUK Student Hub Linktree: resources, forms, events, merchandise, announcements, student links, QR code"],["Sip & Paint","sip-and-paint.html","Paint and sip event, October 2026, photos"],["Collaborate","collaborate.html","Propose a partnership, sponsor an event, support student activities, and collaborate on projects"],["News subscription","news.html#subscribe","Subscribe to ASA TUK news and updates by email, newsletter, you do not need to be a member"]];</script>
 <script src="assets/search.js"></script>
 <script src="assets/site.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/admin-config.js"></script><script src="assets/public-listings.js" defer></script></body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/admin-config.js"></script><script src="assets/public-listings.js" defer></script><script src="assets/project-submission.js" defer></script></body>
 </html>
