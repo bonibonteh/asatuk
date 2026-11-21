@@ -199,3 +199,30 @@ body{background:var(--paper);color:var(--ink)}
 }
 
 .sidebar .sidebar-link{display:block;padding:10px 12px;margin:3px 0;color:var(--muted);text-decoration:none;font-size:13px;border-radius:2px}.sidebar .sidebar-link:hover{background:#eeece5;color:var(--ink)}
+
+/* Personalised council welcome and profile editor */
+#dashboard .overview-welcome{align-items:flex-start;padding:20px 22px 22px;border:1px solid #e5dfd5;border-radius:16px;background:radial-gradient(ellipse at 92% 0%,#f0e3d2 0,transparent 45%),linear-gradient(135deg,#fffefa,#f8f4ec);box-shadow:0 12px 32px #3a2d1c08;animation:welcome-rise .55s cubic-bezier(.2,.7,.2,1) both}
+#dashboard .welcome-copy{min-width:0;flex:1}
+#dashboard .welcome-identity{display:flex;align-items:center;gap:16px;margin:12px 0}
+#dashboard .welcome-identity h2{margin:0 0 7px}
+#dashboard .welcome-sparkle{display:inline-block;color:#b18a45;animation:sparkle-pulse 2.8s ease-in-out infinite}
+#dashboard .welcome-message{color:#766b5d;font-size:14px;line-height:1.6;margin:0;overflow-wrap:anywhere}
+#dashboard .profile-avatar{position:relative;display:grid;place-items:center;flex:0 0 76px;width:76px;height:76px;overflow:hidden;border-radius:50%;background:#eee3d5;color:#8e533d;font-size:22px;font-weight:800;border:2px solid #c4a36c;box-shadow:0 0 0 5px #c4a36c20;animation:avatar-in .65s ease-out both}
+#dashboard .profile-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#dashboard .header-avatar{width:34px;height:34px;object-fit:cover;border-radius:50%;border:1.5px solid #c4a36c;box-shadow:0 0 0 3px #c4a36c20}
+#dashboard .personal-reminder{display:inline-block;margin:14px 0 0;padding:10px 13px;border-left:3px solid #c4a36c;background:#f6efe4;color:#5b5145;font-size:13px;border-radius:0 8px 8px 0;overflow-wrap:anywhere}
+#dashboard .profile-open{margin-top:15px}
+#dashboard .profile-editor{animation:welcome-rise .25s ease-out both}
+#dashboard .profile-form-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px}
+#dashboard .profile-form-grid label{display:block;font-size:13px;font-weight:700;margin:12px 0}
+#dashboard .profile-form-grid label .small{font-weight:400}
+#dashboard #profile-photo{font-size:12px;padding:10px}
+#dashboard .remove-photo{margin-top:4px;font-size:12px}
+#dashboard .profile-form-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+#dashboard #profile-message{font-size:13px;color:var(--red);white-space:pre-wrap}
+#dashboard #profile-message.profile-success{color:#31694e}
+@keyframes welcome-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes avatar-in{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+@keyframes sparkle-pulse{0%,100%{opacity:.6;transform:scale(.92) rotate(-8deg)}50%{opacity:1;transform:scale(1.12) rotate(8deg)}}
+@media(max-width:600px){#dashboard .overview-welcome{padding:16px}#dashboard .welcome-identity{align-items:flex-start;gap:12px}#dashboard .profile-avatar{width:60px;height:60px;flex-basis:60px;font-size:18px}#dashboard .profile-form-grid{grid-template-columns:1fr}#dashboard .header-avatar{width:30px;height:30px}}
+@media(prefers-reduced-motion:reduce){#dashboard .overview-welcome,#dashboard .profile-editor,#dashboard .profile-avatar,#dashboard .welcome-sparkle{animation:none!important}}
