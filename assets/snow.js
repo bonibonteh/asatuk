@@ -13,10 +13,10 @@
   canvas.id = 'asatuk-snow'; canvas.setAttribute('aria-hidden', 'true');
   canvas.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:9990;display:block;background:transparent';
   const ctx = canvas.getContext('2d'); if (!ctx) return;
-  window.__asatukSnow = { canvas, flakes: 0, frames: 0 };
+  window.__asatukSnow = { canvas, flakes: 0, frames: 0, list: null };
 
   const weak = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (navigator.deviceMemory && navigator.deviceMemory <= 2);
-  let filled = false, W = 0, H = 0, dpr = 1, flakes = [], raf = 0, last = 0, running = false, k = 1, clearUntil = 0;
+  let mx = -1e4, my = -1e4, mvx = 0, mvy = 0, mT = 0, mLast = 0, filled = false, W = 0, H = 0, dpr = 1, flakes = [], raf = 0, last = 0, running = false, k = 1, clearUntil = 0;
   const CLEAR_MS = 1400;   // scrolling makes the snow fall away; it drifts back in after this much stillness
 
   // Pre-rendered sprites (soft white flake with a faint cool outline so it reads on light and dark backgrounds)
@@ -32,13 +32,13 @@
     arms('rgba(70,105,160,.95)', 7); arms('#fff', 3.6);
   }, 96);
 
-  const target = () => { const base = Math.min(170, Math.max(50, Math.round((W * H) / 8000))); return Math.max(24, Math.round(base * (W < 700 ? 0.55 : 1) * (weak ? 0.6 : 1))); };
+  const target = () => { const base = Math.min(95, Math.max(30, Math.round((W * H) / 15000))); return Math.max(16, Math.round(base * (W < 700 ? 0.6 : 1) * (weak ? 0.6 : 1))); };
   const make = (initial) => {
     const big = Math.random() < 0.2, size = big ? 18 + Math.random() * 14 : 8 + Math.random() * 8;
     const fast = Math.random() < 0.1;
     return { x: Math.random() * W, y: initial ? Math.random() * H : -size - Math.random() * 60, size, crystal: big && Math.random() < 0.7,
       vy: (fast ? 70 + Math.random() * 50 : 22 + Math.random() * 42) * (0.6 + size / 18), amp: 8 + Math.random() * 30, freq: 0.25 + Math.random() * 0.7, ph: Math.random() * 6.28, drift: (Math.random() - 0.5) * 12,
-      a: big ? 0.95 : 0.8 + Math.random() * 0.2, rot: Math.random() * 6.28, vr: (Math.random() - 0.5) * 1.2, t: Math.random() * 100 };
+      a: big ? 0.95 : 0.8 + Math.random() * 0.2, rot: Math.random() * 6.28, vr: (Math.random() - 0.5) * 1.2, t: Math.random() * 100, ex: 0, ey: 0 };
   };
   const resize = () => {
     dpr = Math.min(window.devicePixelRatio || 1, 2); W = window.innerWidth; H = window.innerHeight;
@@ -51,20 +51,34 @@
     const clearing = now < clearUntil;
     k += ((clearing ? 16 : 1) - k) * Math.min(1, dt * (clearing ? 5 : 1.5));   // ease into the "all falls" rush, then back to gentle
     if (!clearing && flakes.length < target() && Math.random() < dt * target() / 3) flakes.push(make(false));   // flakes re-enter from the top, a few at a time
+    const pointer = now - mT < 2500 && mx > -1e3; const R = 170, decay = Math.exp(-2 * dt); mvx *= Math.exp(-5 * dt); mvy *= Math.exp(-5 * dt);
     ctx.clearRect(0, 0, W, H);
     for (let i = 0; i < flakes.length; i++) {
-      const f = flakes[i]; f.t += dt * (k > 2 ? 0.2 : 1); f.y += f.vy * k * dt; f.rot += f.vr * dt; f.x += f.drift * dt;
+      const f = flakes[i]; if (pointer && !clearing) {
+        const dx = mx - (f.x + Math.sin(f.t * f.freq + f.ph) * f.amp), dy = my - f.y, d = Math.hypot(dx, dy);
+        if (d < R) { const w = (1 - d / R) * (1 - d / R); const sp = Math.min(500, Math.hypot(mvx, mvy)), nx = d > 1 ? dx / d : 0, ny = d > 1 ? dy / d : 0;
+          f.ex += (Math.max(-500, Math.min(500, mvx)) * 0.9 + (d > 35 ? nx * 140 : 0)) * w * dt * 4; f.ey += (Math.max(-500, Math.min(500, mvy)) * 0.9 + (d > 35 ? ny * 140 : 0)) * w * dt * 4; }
+      }
+      f.ex *= decay; f.ey *= decay;
+      f.t += dt * (k > 2 ? 0.2 : 1); f.y += (f.vy * k + f.ey) * dt; f.rot += f.vr * dt; f.x += (f.drift + f.ex) * dt;
       const x = f.x + Math.sin(f.t * f.freq + f.ph) * f.amp;
       if (f.y > H + f.size || x < -60 || x > W + 60) { if (clearing || k > 2) flakes.splice(i--, 1); else flakes[i] = make(false); continue; }
       ctx.globalAlpha = f.a;
       if (f.crystal) { ctx.save(); ctx.translate(x, f.y); ctx.rotate(f.rot); ctx.drawImage(crystal, -f.size / 2, -f.size / 2, f.size, f.size); ctx.restore(); }
       else ctx.drawImage(dot, x - f.size / 2, f.y - f.size / 2, f.size, f.size);
     }
-    ctx.globalAlpha = 1; window.__asatukSnow.frames++; window.__asatukSnow.flakes = flakes.length;
+    ctx.globalAlpha = 1; window.__asatukSnow.frames++; window.__asatukSnow.flakes = flakes.length; window.__asatukSnow.list = flakes;
   };
   const start = () => { if (running) return; running = true; last = 0; raf = requestAnimationFrame(frame); };
   const stop = () => { running = false; cancelAnimationFrame(raf); };
   const mount = () => { document.documentElement.appendChild(canvas); resize(); start(); }; // on <html>: the page body carries a transform that would otherwise stop 'fixed' from meaning the viewport
+  // Mouse (laptop/desktop): snow near the cursor is drawn gently towards it and carried the way it moves.
+  window.addEventListener('pointermove', (e) => {
+    if (e.pointerType && e.pointerType !== 'mouse') return;
+    const t = performance.now(), dt = Math.max(8, t - mLast) / 1000; if (mLast) { mvx = mvx * 0.5 + ((e.clientX - mx) / dt) * 0.5; mvy = mvy * 0.5 + ((e.clientY - my) / dt) * 0.5; }
+    mx = e.clientX; my = e.clientY; mLast = t; mT = t;
+  }, { passive: true });
+  document.documentElement.addEventListener('mouseleave', () => { mT = 0; mx = my = -1e4; });
   const onScroll = () => { clearUntil = performance.now() + CLEAR_MS; };
   ['scroll', 'wheel', 'touchmove'].forEach((ev) => window.addEventListener(ev, onScroll, { passive: true }));
   window.addEventListener('resize', resize, { passive: true });
