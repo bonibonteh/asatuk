@@ -4,6 +4,8 @@
    screen size and device capability, animation pauses when the tab is hidden and is disabled for prefers-reduced-motion. */
 (() => {
   'use strict';
+  try { init(); } catch (e) { /* snow is decorative: never let it break a page */ }
+  function init() {
   if (window.__asatukSnow) return;            // never create a second instance
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
   if (reduce && reduce.matches) return;       // respect accessibility setting
@@ -19,23 +21,23 @@
   // Pre-rendered sprites (soft white flake with a faint cool outline so it reads on light and dark backgrounds)
   const sprite = (draw, size) => { const c = document.createElement('canvas'); c.width = c.height = size; draw(c.getContext('2d'), size / 2); return c; };
   const dot = sprite((g, r) => {
-    const gr = g.createRadialGradient(r, r, 0, r, r, r * 0.9); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.7, 'rgba(255,255,255,1)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
-    g.fillStyle = gr; g.beginPath(); g.arc(r, r, r * 0.9, 0, 7); g.fill();
-    g.strokeStyle = 'rgba(100,135,185,.65)'; g.lineWidth = 1.6; g.beginPath(); g.arc(r, r, r * 0.62, 0, 7); g.stroke();
-  }, 32);
+    g.shadowColor = 'rgba(70,105,160,.75)'; g.shadowBlur = r * 0.35; g.fillStyle = '#fff';
+    g.beginPath(); g.arc(r, r, r * 0.62, 0, 7); g.fill();
+    g.shadowBlur = 0; g.strokeStyle = 'rgba(80,115,170,.85)'; g.lineWidth = 2; g.beginPath(); g.arc(r, r, r * 0.62, 0, 7); g.stroke();
+  }, 48);
   const crystal = sprite((g, r) => {
     g.translate(r, r); g.lineCap = 'round';
     const arms = (col, w) => { g.strokeStyle = col; g.lineWidth = w; for (let i = 0; i < 6; i++) { g.rotate(Math.PI / 3); g.beginPath(); g.moveTo(0, 0); g.lineTo(0, -r * 0.85); g.moveTo(0, -r * 0.5); g.lineTo(r * 0.22, -r * 0.7); g.moveTo(0, -r * 0.5); g.lineTo(-r * 0.22, -r * 0.7); g.stroke(); } };
-    arms('rgba(100,135,185,.8)', 5); arms('rgba(255,255,255,.98)', 2.4);
-  }, 64);
+    arms('rgba(70,105,160,.95)', 7); arms('#fff', 3.6);
+  }, 96);
 
-  const target = () => { const base = Math.min(150, Math.max(40, Math.round((W * H) / 9000))); return Math.max(24, Math.round(base * (W < 700 ? 0.55 : 1) * (weak ? 0.6 : 1))); };
+  const target = () => { const base = Math.min(170, Math.max(50, Math.round((W * H) / 8000))); return Math.max(24, Math.round(base * (W < 700 ? 0.55 : 1) * (weak ? 0.6 : 1))); };
   const make = (initial) => {
-    const big = Math.random() < 0.14, size = big ? 14 + Math.random() * 12 : 5 + Math.random() * 7;
+    const big = Math.random() < 0.2, size = big ? 18 + Math.random() * 14 : 8 + Math.random() * 8;
     const fast = Math.random() < 0.1;
     return { x: Math.random() * W, y: initial ? Math.random() * H : -size - Math.random() * 60, size, crystal: big && Math.random() < 0.7,
       vy: (fast ? 70 + Math.random() * 50 : 22 + Math.random() * 42) * (0.6 + size / 18), amp: 8 + Math.random() * 30, freq: 0.25 + Math.random() * 0.7, ph: Math.random() * 6.28, drift: (Math.random() - 0.5) * 12,
-      a: big ? 0.85 + Math.random() * 0.15 : 0.6 + Math.random() * 0.4, rot: Math.random() * 6.28, vr: (Math.random() - 0.5) * 1.2, t: Math.random() * 100 };
+      a: big ? 0.95 : 0.8 + Math.random() * 0.2, rot: Math.random() * 6.28, vr: (Math.random() - 0.5) * 1.2, t: Math.random() * 100 };
   };
   const resize = () => {
     dpr = Math.min(window.devicePixelRatio || 1, 2); W = window.innerWidth; H = window.innerHeight;
@@ -65,4 +67,5 @@
   window.addEventListener('pagehide', stop);
   window.addEventListener('pageshow', () => { if (!document.hidden && canvas.isConnected) start(); });
   mount();
+  }
 })();
