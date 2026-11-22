@@ -639,3 +639,6 @@ section{padding:clamp(64px,8vw,112px) 0}
 @media(max-width:700px){
   .hub-sec .qr-card{grid-template-columns:1fr;justify-items:center;text-align:center;margin-top:40px;gap:24px}
 }
+
+.read-more{margin-top:12px;background:none;border:0;border-bottom:2px solid var(--r);padding:2px 0;font:inherit;font-weight:700;color:var(--r);cursor:pointer;letter-spacing:.04em}.read-more:hover,.read-more:focus-visible{color:#000;border-color:#000}
+.post .post-summary{max-width:60ch}.opp-deadline{font-weight:700;margin:6px 0}.opp-deadline.closed{color:#8a857a}.full-text{margin-top:14px;line-height:1.6}
