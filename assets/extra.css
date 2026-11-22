@@ -660,3 +660,4 @@ section{padding:clamp(64px,8vw,112px) 0}
 .post.has-img .news-cover{aspect-ratio:auto;height:auto;max-height:none;object-fit:contain;background:transparent}
 .event-card .event-cover{aspect-ratio:auto;height:auto;min-height:0;object-fit:contain;align-self:start;background:transparent}
 @media(max-width:700px){.post.has-img .news-cover,.event-card .event-cover{aspect-ratio:auto;max-height:none;height:auto}}
+.event-detail-image{width:auto;max-width:100%;height:auto;max-height:none;object-fit:contain;margin:12px auto 24px}
