@@ -35,6 +35,22 @@
     bar.addEventListener('click',e=>{const b=e.target.closest('[data-event-filter]');if(!b)return;bar.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b));render(b.dataset.eventFilter)});render('upcoming');
   }
 
+  function words(text,max){
+    const w=String(text||'').replace(/\s+/g,' ').trim().split(' ').filter(Boolean);
+    return w.length>max?w.slice(0,max).join(' ').replace(/[.,;:\-–—]+$/,'')+'…':w.join(' ');
+  }
+  function isUrl(u){return /^https?:\/\//i.test(String(u||''))}
+  function isImg(u){return /\.(jpe?g|png|webp|gif)(\?|$)/i.test(String(u||''))}
+  function dayOnly(v){if(!v)return '';const d=new Date(v);return Number.isNaN(d.getTime())?String(v):d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}
+  function getDialog(){
+    let d=document.getElementById('detail-dialog');
+    if(!d){d=document.createElement('dialog');d.id='detail-dialog';d.className='event-detail-dialog';d.innerHTML='<button type="button" class="event-detail-close" aria-label="Close details">×</button><div class="event-detail-content"></div>';document.body.appendChild(d);d.querySelector('.event-detail-close').addEventListener('click',()=>d.close());d.addEventListener('click',e=>{if(e.target===d)d.close()})}
+    return d;
+  }
+  function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function linkBtn(href,text,cls){const a=el('a',cls||'event-register',text);a.href=href;a.target='_blank';a.rel='noopener noreferrer';return a}
+  function openDetail(build){const d=getDialog(),c=d.querySelector('.event-detail-content');c.replaceChildren();build(c);d.showModal()}
+
   async function loadNews() {
     const root = document.querySelector('.posts');
     if (!root) return;
@@ -42,38 +58,58 @@
       .select('title,body,category,image_url,published_at,created_at')
       .eq('status', 'published')
       .order('published_at', {ascending: false});
-
-    if (error) {
-      console.error('ASA TUK news could not load:', error);
-      showMessage(root, 'New online announcements could not load. Please refresh the page.');
-      return;
-    }
+    if (error) { console.error('ASA TUK news could not load:', error); showMessage(root, 'New online announcements could not load. Please refresh the page.'); return; }
     if (!data || data.length === 0) { showMessage(root, 'No published news yet. New announcements will appear here after an administrator publishes them.'); return; }
-
     data.forEach(item => {
-      // Avoid duplicates if an announcement is also maintained in the static page content.
       const titleText = String(item.title || '').trim().toLowerCase();
-      const duplicate = Array.from(root.querySelectorAll('article.post h3'))
-        .some(h => h.textContent.trim().toLowerCase() === titleText);
+      const duplicate = Array.from(root.querySelectorAll('article.post h3')).some(h => h.textContent.trim().toLowerCase() === titleText);
       if (duplicate) return;
-      const article = document.createElement('article');
-      article.className = 'post';
-      const meta = document.createElement('div');
-      meta.className = 'pm';
-      const time = document.createElement('time');
-      time.textContent = date(item.published_at || item.created_at);
-      const category = document.createElement('span');
-      category.textContent = item.category || 'Announcement';
-      meta.append(time, category);
-      const body = document.createElement('div');
-      if(item.image_url && (item.image_url.startsWith('https://') || item.image_url.startsWith('http://'))){const image=document.createElement('img');image.src=item.image_url;image.alt='';image.loading='lazy';image.className='news-cover';article.appendChild(image)}
-      const heading = document.createElement('h3');
-      heading.textContent = item.title || 'ASA TUK announcement';
-      const paragraph = document.createElement('p');
-      paragraph.textContent = item.body || '';
-      body.append(heading, paragraph);
+      const when = date(item.published_at || item.created_at), title = item.title || 'ASA TUK announcement', cat = item.category || 'Announcement';
+      const article = el('article','post');
+      const meta = el('div','pm'); const time = el('time','',when); meta.append(time, el('span','',cat));
+      const body = el('div');
+      const heading = el('h3','',title);
+      const summary = el('p','post-summary',words(item.body,35));
+      const more = el('button','read-more','Read more →'); more.type='button';
+      more.setAttribute('aria-label','Read more: '+title);
+      more.addEventListener('click',()=>openDetail(c=>{
+        if(isUrl(item.image_url)&&isImg(item.image_url)){const im=el('img','event-detail-image');im.src=item.image_url;im.alt='';c.appendChild(im)}
+        c.append(el('h2','',title),el('p','event-meta',when+' · '+cat));
+        const full=el('p','full-text',item.body||'');full.style.whiteSpace='pre-line';c.appendChild(full);
+        if(isUrl(item.image_url)&&!isImg(item.image_url))c.appendChild(linkBtn(item.image_url,'Open attachment ↗'));
+      }));
+      body.append(heading, summary, more);
+      if(isUrl(item.image_url)&&isImg(item.image_url)){const image=el('img','news-cover');image.src=item.image_url;image.alt='';image.loading='lazy';article.appendChild(image)}
       article.append(meta, body);
       root.appendChild(article);
+    });
+  }
+
+  async function loadOpportunities() {
+    const root = document.querySelector('.opps');
+    if (!root) return;
+    const {data, error} = await db.from('opportunities')
+      .select('id,title,description,organisation,category,deadline,application_url,created_at')
+      .eq('status','published').order('created_at',{ascending:false});
+    if (error) { console.error('ASA TUK opportunities could not load:', error); showMessage(root,'Opportunities could not load right now. Please refresh the page.'); return; }
+    if (!data || !data.length) { showMessage(root,'No opportunities published yet. Please check back soon.'); return; }
+    const today=new Date();today.setHours(0,0,0,0);
+    const rows=data.slice().sort((a,b)=>{const ea=a.deadline&&new Date(a.deadline)<today,eb=b.deadline&&new Date(b.deadline)<today;if(!!ea!==!!eb)return ea?1:-1;return (a.deadline?new Date(a.deadline).getTime():Infinity)-(b.deadline?new Date(b.deadline).getTime():Infinity)});
+    const grid=el('div','event-grid');root.appendChild(grid);
+    rows.forEach(item=>{
+      const title=item.title||'ASA TUK opportunity',closed=item.deadline&&new Date(item.deadline)<today;
+      const card=el('article','event-card opp-card');const body=el('div','event-card-body');
+      const tag=el('span','event-date',(item.category||'Opportunity')+(item.organisation?' · '+item.organisation:''));
+      const h=el('h2','',title);
+      const dl=el('p','opp-deadline',item.deadline?(closed?'Closed ':'Deadline: ')+dayOnly(item.deadline):'Deadline: not stated');if(closed)dl.classList.add('closed');
+      const sum=el('p','',words(item.description,45));
+      const more=el('button','read-more','View opportunity →');more.type='button';more.setAttribute('aria-label','View opportunity: '+title);
+      more.addEventListener('click',()=>openDetail(c=>{
+        c.append(el('h2','',title),el('p','event-meta',[item.category,item.organisation].filter(Boolean).join(' · ')||'Opportunity'),el('p','opp-deadline'+(closed?' closed':''),item.deadline?(closed?'Closed ':'Deadline: ')+dayOnly(item.deadline):'Deadline: not stated'));
+        const full=el('p','full-text',item.description||'More details will be shared by ASA TUK.');full.style.whiteSpace='pre-line';c.appendChild(full);
+        if(isUrl(item.application_url))c.appendChild(linkBtn(item.application_url,(isImg(item.application_url)||/\.(pdf|docx?|pptx?|xlsx?)(\?|$)/i.test(item.application_url))?'Open attachment ↗':'Apply / learn more ↗'));
+      }));
+      body.append(tag,h,dl,sum,more);card.appendChild(body);grid.appendChild(card);
     });
   }
 
@@ -81,4 +117,5 @@
   // and their physical HTML paths (/events.html, /news.html).
   if (/(^|\/)events(?:\.html)?\/?$/.test(path)) loadEvents();
   if (/(^|\/)news(?:\.html)?\/?$/.test(path)) loadNews();
+  if (/(^|\/)opportunities(?:\.html)?\/?$/.test(path)) loadOpportunities();
 })();
