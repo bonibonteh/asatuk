@@ -265,7 +265,7 @@
     const c = src, rc = src.rec || rowsFor(c.id), to = rc.filter((r) => r.kind === 'to'), cc = rc.filter((r) => r.kind === 'cc');
     const name = (r) => esc(r.recipient_name ? r.recipient_name + ', ' + (r.designation || '') + ' — ' + r.docket : 'The Head, ' + r.docket + ' Docket');
     const atts = src.atts || evAtts(c.id, null);
-    return '<div class="sheet"><header class="lh"><img src="assets/logo.png" alt="ASA TUK logo" width="64" height="64"><div><b>ASA TUK</b><span>Council Secretariat</span></div></header>' +
+    return '<div class="sheet"><header class="lh"><img src="assets/logo.png" alt="Architecture Students Association logo" width="96" height="96"><b class="lh-name">ASA TUK</b></header><div class="lh-rule"></div><p class="lh-org">ASSOCIATION OF STUDENTS OF ARCHITECTURE</p>' +
       '<table class="lh-meta"><tr><td><b>Ref:</b> ' + esc(c.ref_no || 'Assigned on dispatch') + '</td><td style="text-align:right"><b>Date:</b> ' + esc(fmtDate(c.letter_date || today())) + '</td></tr></table>' +
       '<p><b>To:</b><br>' + (to.map(name).join('<br>') || '—') + '</p>' + (cc.length ? '<p><b>Copy:</b><br>' + cc.map(name).join('<br>') + '</p>' : '') +
       '<p class="subj">' + esc((c.subject || '').toUpperCase()) + '</p>' + (c.priority && c.priority !== 'Normal' ? '<p><b>Priority:</b> ' + esc(c.priority) + '</p>' : '') + (c.response_deadline ? '<p><b>Response requested by:</b> ' + esc(fmtDate(c.response_deadline)) + '</p>' : '') +
