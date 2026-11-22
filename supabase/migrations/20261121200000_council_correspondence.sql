@@ -135,14 +135,12 @@ language sql stable security definer set search_path = '' as $$
    where private.corr_active() and ca.user_id = (select auth.uid()) and ca.is_active and ca.is_docket_head;
 $$;
 
--- May this user dispatch letters from the given docket? head, Secretary General, administrator or secretariat-rights holder.
+-- May this user dispatch letters from the given docket? Any active member of that docket, or an administrator.
 create or replace function private.corr_can_send_from(p_docket text) returns boolean
 language sql stable security definer set search_path = '' as $$
   select private.corr_active() and (
     exists (select 1 from public.admin_users au where au.user_id=(select auth.uid()) and au.role='admin' and not au.is_suspended)
-    or exists (select 1 from public.council_role_assignments ca
-                where ca.user_id=(select auth.uid()) and ca.is_active and ca.docket = p_docket
-                  and (ca.is_docket_head or ca.can_manage_secretariat or lower(btrim(ca.role_title))='secretary general'))
+    or exists (select 1 from public.council_role_assignments ca where ca.user_id=(select auth.uid()) and ca.is_active and ca.docket = p_docket)
   );
 $$;
 

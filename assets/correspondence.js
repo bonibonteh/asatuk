@@ -23,7 +23,7 @@
   const daysTo = (d) => Math.round((new Date(d + 'T00:00:00') - new Date(today() + 'T00:00:00')) / 86400000);
 
   let H = null, db = null, me = null;
-  const S = { view: 'inbox', rows: [], rcpt: {}, ev: {}, att: {}, notifs: [], dir: [], q: '', pri: 'all', sort: 'new', loaded: false, draft: null, files: [], detailId: null };
+  const S = { view: 'inbox', rows: [], rcpt: {}, ev: {}, att: {}, notifs: [], dir: [], q: '', pri: 'all', sort: 'new', docket: 'all', status: 'all', year: 'all', limit: 20, loaded: false, draft: null, files: [], detailId: null };
 
   /* ---------- identity helpers (UI hints only; the database enforces the rules) ---------- */
   const mine = () => H.assignments || [];
@@ -31,9 +31,8 @@
   const myHeadDockets = () => [...new Set(mine().filter((a) => a.is_docket_head).map((a) => a.docket))];
   const oversight = () => !!H.canDelete;
   const sendDockets = () => {
-    const ok = mine().filter((a) => a.is_docket_head || a.can_manage_secretariat || String(a.role_title || '').trim().toLowerCase() === 'secretary general').map((a) => a.docket);
-    const set = new Set(ok);
-    if (H.admin) { mine().forEach((a) => set.add(a.docket)); set.add('Administration'); }
+    const set = new Set(mine().map((a) => a.docket));
+    if (H.admin) set.add('Administration');
     return [...set];
   };
   const canCompose = () => sendDockets().length > 0;
@@ -87,6 +86,9 @@
     const f = VIEW_FILTER[S.view] || (() => true), q = S.q.trim().toLowerCase();
     let list = S.rows.filter(f);
     if (S.pri !== 'all') list = list.filter((c) => c.priority === S.pri);
+    if (S.docket !== 'all') list = list.filter((c) => c.sender_docket === S.docket || rowsFor(c.id).some((r) => r.docket === S.docket));
+    if (S.status !== 'all') list = list.filter((c) => c.status === S.status || myToRows(c).some((r) => r.status === S.status));
+    if (S.year !== 'all') list = list.filter((c) => (sortKey(c) || '').slice(0, 4) === S.year);
     if (q) list = list.filter((c) => [c.ref_no, c.subject, c.body, c.sender_docket, c.sender_name, ...rowsFor(c.id).map((r) => r.docket + ' ' + (r.recipient_name || ''))].join(' ').toLowerCase().includes(q));
     const by = { new: (a, b) => sortKey(b).localeCompare(sortKey(a)), old: (a, b) => sortKey(a).localeCompare(sortKey(b)), deadline: (a, b) => (a.response_deadline || '9999').localeCompare(b.response_deadline || '9999'), priority: (a, b) => PRIORITIES.indexOf(b.priority) - PRIORITIES.indexOf(a.priority) };
     return list.sort(by[S.sort]);
@@ -109,11 +111,17 @@
     nav.innerHTML = VIEWS.filter(([k]) => k !== 'compose' || canCompose()).map(([k, l]) => '<button type="button" class="' + (S.view === k ? 'active' : '') + '" data-corr-view="' + k + '">' + esc(l) + (k === 'inbox' && unread ? ' <b class="badge">' + unread + '</b>' : counts[k] ? ' <span class="count">' + counts[k] + '</span>' : '') + '</button>').join('');
     const list = $('corr-list');
     $('corr-tools').hidden = S.view === 'compose';
+    const years = [...new Set(S.rows.map((c) => (sortKey(c) || '').slice(0, 4)).filter(Boolean))].sort().reverse();
+    const fill = (id, first, opts, cur) => { const el = $(id); const html = '<option value="all">' + first + '</option>' + opts.map(([v, l]) => '<option value="' + esc(v) + '">' + esc(l) + '</option>').join(''); if (el.dataset.h !== html) { el.innerHTML = html; el.dataset.h = html; } el.value = cur; };
+    fill('corr-docket', 'All dockets', DOCKETS.concat(['Administration']).map((d) => [d, d]), S.docket); fill('corr-status', 'Any status', Object.entries(CSTATUS).filter(([k]) => k !== 'draft').concat(Object.entries(RSTATUS)).map(([k, v]) => [k, v]), S.status); fill('corr-year', 'All years', years.map((y) => [y, y]), S.year);
     if (S.view === 'compose') { list.innerHTML = '<div class="empty">Opening the letter composer…</div>'; return; }
     if (!S.loaded) { list.innerHTML = '<div class="empty">Loading correspondence…</div>'; return; }
     const rows = visible();
     const empty = { inbox: 'No incoming correspondence.', outbox: 'You have not sent any correspondence yet.', drafts: 'No saved drafts.', pending: 'Nothing is waiting for action.', forwarded: 'You have not forwarded any correspondence.', archive: 'No archived correspondence.', tracking: 'No correspondence to track.' }[S.view];
-    list.innerHTML = rows.length ? rows.map(card).join('') : '<div class="empty">' + esc(S.q || S.pri !== 'all' ? 'Nothing matches your search or filter.' : empty) + '</div>';
+    const shown = rows.slice(0, S.limit); let lastMonth = '';
+    const grouped = shown.map((c) => { const m = new Date(sortKey(c)).toLocaleDateString('en-KE', { month: 'long', year: 'numeric' }); const h = m !== lastMonth ? '<h3 class="corr-month">' + esc(m) + '</h3>' : ''; lastMonth = m; return h + card(c); }).join('') + (rows.length > S.limit ? '<button type="button" class="secondary corr-more" id="corr-more">Show more (' + (rows.length - S.limit) + ' older)</button>' : '');
+    $('corr-count').textContent = rows.length + (rows.length === 1 ? ' letter' : ' letters');
+    list.innerHTML = rows.length ? grouped : '<div class="empty">' + esc(S.q || S.pri !== 'all' || S.docket !== 'all' || S.status !== 'all' || S.year !== 'all' ? 'Nothing matches your search or filter.' : empty) + '</div>';
     $('corr-scope').textContent = S.view === 'tracking' && oversight() ? 'Council-wide view: every dispatched letter, with its status and history.' : S.view === 'tracking' ? 'Status and history of the correspondence you can access.' : '';
   }
 
@@ -280,12 +288,13 @@
   }
 
   /* ---------- wiring ---------- */
-  function setView(v) { S.view = v; if (v === 'compose') { openCompose(null); S.view = 'inbox'; } render(); }
+  function setView(v) { S.view = v; S.limit = 20; if (v === 'compose') { openCompose(null); S.view = 'inbox'; } render(); }
   function goTab(v) { document.querySelector('[data-tab="correspondence"]')?.click(); document.getElementById('correspondence-panel')?.scrollIntoView({ block: 'start' }); setView(v); }
   function wire() {
     document.addEventListener('click', async (e) => {
       const t = e.target.closest('button,[data-open]'); if (!t) return;
       try {
+        if (t.id === 'corr-more') { S.limit += 20; return render(); }
         if (t.dataset.corrView) return setView(t.dataset.corrView);
         if (t.dataset.corrGo) return goTab(t.dataset.corrGo);
         if (t.id === 'corr-mark-all') { await db.from('correspondence_notifications').update({ read_at: new Date().toISOString() }).is('read_at', null).eq('user_id', me); return load(); }
@@ -308,7 +317,9 @@
       } catch (err) { note(err.message || 'Something went wrong.'); const m = $('corr-detail-msg'); if (m) m.textContent = err.message || ''; }
     });
     document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches?.('.corr-card')) { e.preventDefault(); openDetail(e.target.dataset.open); } });
-    $('corr-q').oninput = (e) => { S.q = e.target.value; render(); };
+    $('corr-q').oninput = (e) => { S.q = e.target.value; S.limit = 20; render(); };
+    [['corr-docket', 'docket'], ['corr-status', 'status'], ['corr-year', 'year']].forEach(([id, k]) => ($(id).onchange = (e) => { S[k] = e.target.value; S.limit = 20; render(); }));
+    $('corr-clear').onclick = () => { Object.assign(S, { q: '', pri: 'all', docket: 'all', status: 'all', year: 'all', limit: 20 }); $('corr-q').value = ''; $('corr-pri').value = 'all'; render(); };
     $('corr-pri').onchange = (e) => { S.pri = e.target.value; render(); };
     $('corr-sort').onchange = (e) => { S.sort = e.target.value; render(); };
     $('corr-compose-form').docket.onchange = updateSender;
