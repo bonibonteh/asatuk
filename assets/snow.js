@@ -16,7 +16,8 @@
   window.__asatukSnow = { canvas, flakes: 0, frames: 0 };
 
   const weak = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (navigator.deviceMemory && navigator.deviceMemory <= 2);
-  let W = 0, H = 0, dpr = 1, flakes = [], raf = 0, last = 0, running = false;
+  let filled = false, W = 0, H = 0, dpr = 1, flakes = [], raf = 0, last = 0, running = false, k = 1, clearUntil = 0;
+  const CLEAR_MS = 1400;   // scrolling makes the snow fall away; it drifts back in after this much stillness
 
   // Pre-rendered sprites (soft white flake with a faint cool outline so it reads on light and dark backgrounds)
   const sprite = (draw, size) => { const c = document.createElement('canvas'); c.width = c.height = size; draw(c.getContext('2d'), size / 2); return c; };
@@ -42,16 +43,19 @@
   const resize = () => {
     dpr = Math.min(window.devicePixelRatio || 1, 2); W = window.innerWidth; H = window.innerHeight;
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = target(); while (flakes.length < n) flakes.push(make(true)); if (flakes.length > n) flakes.length = n;
+    const n = target(); if (!filled) { filled = true; while (flakes.length < n) flakes.push(make(true)); } if (flakes.length > n) flakes.length = n;   // later resizes (e.g. mobile address bar) must not pop flakes in
   };
   const frame = (now) => {
     if (!running) return; raf = requestAnimationFrame(frame);
     const dt = Math.min(0.05, (now - (last || now)) / 1000); last = now;
+    const clearing = now < clearUntil;
+    k += ((clearing ? 16 : 1) - k) * Math.min(1, dt * (clearing ? 5 : 1.5));   // ease into the "all falls" rush, then back to gentle
+    if (!clearing && flakes.length < target() && Math.random() < dt * target() / 3) flakes.push(make(false));   // flakes re-enter from the top, a few at a time
     ctx.clearRect(0, 0, W, H);
     for (let i = 0; i < flakes.length; i++) {
-      const f = flakes[i]; f.t += dt; f.y += f.vy * dt; f.rot += f.vr * dt; f.x += f.drift * dt;
+      const f = flakes[i]; f.t += dt * (k > 2 ? 0.2 : 1); f.y += f.vy * k * dt; f.rot += f.vr * dt; f.x += f.drift * dt;
       const x = f.x + Math.sin(f.t * f.freq + f.ph) * f.amp;
-      if (f.y > H + f.size || x < -60 || x > W + 60) { flakes[i] = make(false); continue; }
+      if (f.y > H + f.size || x < -60 || x > W + 60) { if (clearing || k > 2) flakes.splice(i--, 1); else flakes[i] = make(false); continue; }
       ctx.globalAlpha = f.a;
       if (f.crystal) { ctx.save(); ctx.translate(x, f.y); ctx.rotate(f.rot); ctx.drawImage(crystal, -f.size / 2, -f.size / 2, f.size, f.size); ctx.restore(); }
       else ctx.drawImage(dot, x - f.size / 2, f.y - f.size / 2, f.size, f.size);
@@ -61,6 +65,8 @@
   const start = () => { if (running) return; running = true; last = 0; raf = requestAnimationFrame(frame); };
   const stop = () => { running = false; cancelAnimationFrame(raf); };
   const mount = () => { document.documentElement.appendChild(canvas); resize(); start(); }; // on <html>: the page body carries a transform that would otherwise stop 'fixed' from meaning the viewport
+  const onScroll = () => { clearUntil = performance.now() + CLEAR_MS; };
+  ['scroll', 'wheel', 'touchmove'].forEach((ev) => window.addEventListener(ev, onScroll, { passive: true }));
   window.addEventListener('resize', resize, { passive: true });
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
   if (reduce && reduce.addEventListener) reduce.addEventListener('change', (e) => { if (e.matches) { stop(); canvas.remove(); } else { mount(); } });
