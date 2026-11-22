@@ -642,3 +642,17 @@ section{padding:clamp(64px,8vw,112px) 0}
 
 .read-more{margin-top:12px;background:none;border:0;border-bottom:2px solid var(--r);padding:2px 0;font:inherit;font-weight:700;color:var(--r);cursor:pointer;letter-spacing:.04em}.read-more:hover,.read-more:focus-visible{color:#000;border-color:#000}
 .post .post-summary{max-width:60ch}.opp-deadline{font-weight:700;margin:6px 0}.opp-deadline.closed{color:#8a857a}.full-text{margin-top:14px;line-height:1.6}
+
+/* Announcements & opportunities: poster left, text right (fixes text falling under the poster) */
+.post.has-img{grid-template-columns:minmax(200px,280px) minmax(0,1fr);gap:28px;align-items:start}
+.post.has-img .news-cover{width:100%;height:auto;max-height:none;aspect-ratio:4/5;object-fit:cover;margin:0}
+.post-main{display:grid;gap:12px;min-width:0}
+.post-main .pm{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}
+.post-main h3,.post h3{overflow-wrap:break-word;hyphens:manual}
+.post>div{min-width:0}
+.event-grid{grid-template-columns:minmax(0,1fr)}
+.event-card{grid-template-columns:minmax(200px,300px) minmax(0,1fr)}
+.event-card>.event-card-body:only-child{grid-column:1/-1}
+.event-card .event-cover{min-height:0;aspect-ratio:4/5;height:100%}
+.event-card-body{min-width:0;overflow-wrap:break-word}
+@media(max-width:700px){.post.has-img{grid-template-columns:1fr}.post.has-img .news-cover{aspect-ratio:16/10;max-height:320px}.event-card{grid-template-columns:1fr}.event-card .event-cover{aspect-ratio:16/10;height:auto}}

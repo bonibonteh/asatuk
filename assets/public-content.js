@@ -79,8 +79,11 @@
         if(isUrl(item.image_url)&&!isImg(item.image_url))c.appendChild(linkBtn(item.image_url,'Open attachment ↗'));
       }));
       body.append(heading, summary, more);
-      if(isUrl(item.image_url)&&isImg(item.image_url)){const image=el('img','news-cover');image.src=item.image_url;image.alt='';image.loading='lazy';article.appendChild(image)}
-      article.append(meta, body);
+      if(isUrl(item.image_url)&&isImg(item.image_url)){
+        const image=el('img','news-cover');image.src=item.image_url;image.alt='';image.loading='lazy';
+        const main=el('div','post-main');main.append(meta,body);
+        article.classList.add('has-img');article.append(image,main);
+      } else article.append(meta, body);
       root.appendChild(article);
     });
   }
