@@ -15,3 +15,5 @@
 #corr-print-root{display:none}
 @media print{.sheet,.sheet *{-webkit-print-color-adjust:exact;print-color-adjust:exact}body.corr-printing>*:not(#corr-print-root){display:none!important}body.corr-printing #corr-print-root{display:block!important}body.corr-printing{background:#fff}.sheet{padding:0;max-width:none}}
 @media(max-width:780px){.corr-stats{grid-template-columns:repeat(2,minmax(0,1fr))}#corr-list{grid-template-columns:1fr}.corr-meta,.corr-form{grid-template-columns:1fr}.sheet{padding:20px 16px}.sheet .lh-name{font-size:30px}.sheet .lh img{width:68px;height:68px}.sheet .lh-org{font-size:15px}#corr-tools select{flex:1}}
+
+.corr-month{grid-column:1/-1;margin:10px 0 0;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:4px}.corr-more{grid-column:1/-1;padding:12px}#corr-tools select{max-width:170px}
