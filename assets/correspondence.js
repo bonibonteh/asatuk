@@ -4,7 +4,11 @@
 (() => {
   'use strict';
   const BUCKET = 'correspondence-files';
-  const DOCKETS = ['Executive', 'Secretariat', 'Events', 'Organizing', 'Academic', 'PR & Communications', 'Merchandise', 'Treasury'];
+  const BASE_DOCKETS = ['Executive', 'Secretariat', 'Events', 'Organizing', 'Academic', 'PR & Communications', 'Merchandise', 'Treasury'];
+  const CHAPTERS = ['Architecture', 'Urban Planning'];
+  // A docket always carries its chapter: "Architecture · Treasury" is a different office from "Urban Planning · Treasury".
+  const DOCKETS = CHAPTERS.flatMap((c) => BASE_DOCKETS.map((d) => c + ' · ' + d));
+  const fmtDocket = (d) => { const p = String(d || '').split(' · '); return p.length === 2 ? p[1] + ' Docket, ' + (p[0] === 'Association' ? 'Association-wide' : p[0] + ' Chapter') : String(d || ''); };
   const TYPES = ['Official Letter', 'Internal Memo', 'Request', 'Invitation', 'Notice', 'Report Submission', 'Other'];
   const PRIORITIES = ['Normal', 'Urgent', 'High Priority'];
   const EXT_MIME = { pdf: 'application/pdf', doc: 'application/msword', docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', xls: 'application/vnd.ms-excel', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', ppt: 'application/vnd.ms-powerpoint', pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', txt: 'text/plain', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png' };
@@ -27,17 +31,15 @@
 
   /* ---------- identity helpers (UI hints only; the database enforces the rules) ---------- */
   const mine = () => H.assignments || [];
-  const myDockets = () => [...new Set(mine().map((a) => a.docket))];
-  const myHeadDockets = () => [...new Set(mine().filter((a) => a.is_docket_head).map((a) => a.docket))];
-  const oversight = () => !!H.canDelete;
-  const sendDockets = () => {
-    const set = new Set(mine().map((a) => a.docket));
-    if (H.admin) set.add('Administration');
-    return [...set];
-  };
+  const keysOf = (a) => (a.chapter === 'Architecture' || a.chapter === 'Urban Planning') ? [a.chapter + ' · ' + a.docket] : a.chapter === 'Association' ? ['Association · ' + a.docket, ...CHAPTERS.map((c) => c + ' · Executive')] : [];
+  const myDockets = () => [...new Set(mine().flatMap(keysOf))];
+  const myHeadDockets = () => [...new Set(mine().filter((a) => a.is_docket_head).flatMap(keysOf))];
+  const oversight = () => !!H.canDelete || mine().some((a) => a.chapter === 'Association');
+  const sendDockets = () => { const set = new Set(myDockets()); if (H.admin) set.add('Administration'); return [...set]; };
+  const unassigned = () => !H.admin && !myDockets().length;
   const canCompose = () => sendDockets().length > 0;
   const senderIdentity = (docket) => {
-    const a = mine().find((x) => x.docket === docket);
+    const a = mine().find((x) => keysOf(x).includes(docket));
     return { name: a?.display_name || H.adminName || H.user.email, designation: a?.role_title || (H.admin ? 'Administrator' : 'Council official') };
   };
   const rowsFor = (id) => S.rcpt[id] || [];
@@ -86,7 +88,7 @@
     const f = VIEW_FILTER[S.view] || (() => true), q = S.q.trim().toLowerCase();
     let list = S.rows.filter(f);
     if (S.pri !== 'all') list = list.filter((c) => c.priority === S.pri);
-    if (S.docket !== 'all') list = list.filter((c) => c.sender_docket === S.docket || rowsFor(c.id).some((r) => r.docket === S.docket));
+    if (S.docket !== 'all') { const ch = S.docket.startsWith('chapter:') ? S.docket.slice(8) + ' · ' : null, hit = (d) => (ch ? d.startsWith(ch) : d === S.docket); list = list.filter((c) => hit(c.sender_docket) || rowsFor(c.id).some((r) => hit(r.docket))); }
     if (S.status !== 'all') list = list.filter((c) => c.status === S.status || myToRows(c).some((r) => r.status === S.status));
     if (S.year !== 'all') list = list.filter((c) => (sortKey(c) || '').slice(0, 4) === S.year);
     if (q) list = list.filter((c) => [c.ref_no, c.subject, c.body, c.sender_docket, c.sender_name, ...rowsFor(c.id).map((r) => r.docket + ' ' + (r.recipient_name || ''))].join(' ').toLowerCase().includes(q));
@@ -113,8 +115,9 @@
     $('corr-tools').hidden = S.view === 'compose';
     const years = [...new Set(S.rows.map((c) => (sortKey(c) || '').slice(0, 4)).filter(Boolean))].sort().reverse();
     const fill = (id, first, opts, cur) => { const el = $(id); const html = '<option value="all">' + first + '</option>' + opts.map(([v, l]) => '<option value="' + esc(v) + '">' + esc(l) + '</option>').join(''); if (el.dataset.h !== html) { el.innerHTML = html; el.dataset.h = html; } el.value = cur; };
-    fill('corr-docket', 'All dockets', DOCKETS.concat(['Administration']).map((d) => [d, d]), S.docket); fill('corr-status', 'Any status', Object.entries(CSTATUS).filter(([k]) => k !== 'draft').concat(Object.entries(RSTATUS)).map(([k, v]) => [k, v]), S.status); fill('corr-year', 'All years', years.map((y) => [y, y]), S.year);
+    fill('corr-docket', 'All dockets', CHAPTERS.map((c) => ['chapter:' + c, c + ' chapter (all)']).concat(DOCKETS.concat(['Administration']).map((d) => [d, d])), S.docket); fill('corr-status', 'Any status', Object.entries(CSTATUS).filter(([k]) => k !== 'draft').concat(Object.entries(RSTATUS)).map(([k, v]) => [k, v]), S.status); fill('corr-year', 'All years', years.map((y) => [y, y]), S.year);
     if (S.view === 'compose') { list.innerHTML = '<div class="empty">Opening the letter composer…</div>'; return; }
+    if (unassigned()) { $('corr-tools').hidden = true; list.innerHTML = '<div class="empty"><b>Your chapter has not been set yet.</b><br>Correspondence is tied to your chapter (Architecture or Urban Planning) and docket. Ask the administrator to set your chapter, then refresh this page.</div>'; return; }
     if (!S.loaded) { list.innerHTML = '<div class="empty">Loading correspondence…</div>'; return; }
     const rows = visible();
     const empty = { inbox: 'No incoming correspondence.', outbox: 'You have not sent any correspondence yet.', drafts: 'No saved drafts.', pending: 'Nothing is waiting for action.', forwarded: 'You have not forwarded any correspondence.', archive: 'No archived correspondence.', tracking: 'No correspondence to track.' }[S.view];
@@ -271,13 +274,13 @@
   }
   function letterHtml(src) {
     const c = src, rc = src.rec || rowsFor(c.id), to = rc.filter((r) => r.kind === 'to'), cc = rc.filter((r) => r.kind === 'cc');
-    const name = (r) => esc(r.recipient_name ? r.recipient_name + ', ' + (r.designation || '') + ' — ' + r.docket : 'The Head, ' + r.docket + ' Docket');
+    const name = (r) => esc(r.recipient_name ? r.recipient_name + ', ' + (r.designation || '') + ' — ' + fmtDocket(r.docket) : 'The Head, ' + fmtDocket(r.docket));
     const atts = src.atts || evAtts(c.id, null);
     return '<div class="sheet"><header class="lh"><img src="assets/logo.png" alt="Architecture Students Association logo" width="96" height="96"><b class="lh-name">ASA TUK</b></header><div class="lh-rule"></div><p class="lh-org">ASSOCIATION OF STUDENTS OF ARCHITECTURE</p>' +
       '<table class="lh-meta"><tr><td><b>Ref:</b> ' + esc(c.ref_no || 'Assigned on dispatch') + '</td><td style="text-align:right"><b>Date:</b> ' + esc(fmtDate(c.letter_date || today())) + '</td></tr></table>' +
       '<p><b>To:</b><br>' + (to.map(name).join('<br>') || '—') + '</p>' + (cc.length ? '<p><b>Copy:</b><br>' + cc.map(name).join('<br>') + '</p>' : '') +
       '<p class="subj">' + esc((c.subject || '').toUpperCase()) + '</p>' + (c.priority && c.priority !== 'Normal' ? '<p><b>Priority:</b> ' + esc(c.priority) + '</p>' : '') + (c.response_deadline ? '<p><b>Response requested by:</b> ' + esc(fmtDate(c.response_deadline)) + '</p>' : '') +
-      '<div class="lbody">' + esc(c.body) + '</div><p class="sig">Yours faithfully,<br><br><b>' + esc(c.sender_name) + '</b><br>' + esc(c.sender_designation) + '<br>' + esc(c.sender_docket) + ' Docket, ASA TUK</p>' +
+      '<div class="lbody">' + esc(c.body) + '</div><p class="sig">Yours faithfully,<br><br><b>' + esc(c.sender_name) + '</b><br>' + esc(c.sender_designation) + '<br>' + esc(fmtDocket(c.sender_docket)) + ', ASA TUK</p>' +
       (atts.length ? '<p><b>Attachments:</b></p><ol>' + atts.map((a) => '<li>' + esc(a.name) + '</li>').join('') + '</ol>' : '') + '</div>';
   }
   function showLetter(html) { $('corr-letter-body').innerHTML = html; const d = $('corr-letter'); if (!d.open) d.showModal(); }
@@ -357,7 +360,7 @@
   async function init(ctx) {
     if (H) return; H = ctx; db = H.db; me = H.user.id;
     wire(); render();
-    try { const d = await db.rpc('correspondence_directory'); S.dir = d.data || []; } catch (e) { S.dir = []; }
+    try { const d = await db.rpc('correspondence_directory_v2'); S.dir = d.data || []; } catch (e) { S.dir = []; }
     try { await db.rpc('correspondence_refresh_deadline_alerts'); } catch (e) { /* alerts are best-effort */ }
     await load();
     setInterval(() => { if (!document.hidden) load(); }, 60000);
