@@ -1,0 +1,26 @@
+/* ASA TUK Merchandise Dashboard: shared blue design language with the public shop */
+:root{--paper:#eef3ff;--white:#fff;--ink:#0b1f6b;--muted:#5f6b9a;--line:#d6e0fb;--red:#1747e8;--green:#1a7f4b;--blue2:#4f7bff}
+body{background:radial-gradient(1200px 500px at 85% -10%,#dbe6ff 0,transparent 60%),linear-gradient(#f6f9ff,#eaf0ff);min-height:100vh}
+.bar{background:#ffffffcc;backdrop-filter:blur(10px);position:sticky;top:0;z-index:20;padding:14px 18px;border-radius:0 0 22px 22px;border:1px solid var(--line);border-top:0;box-shadow:0 10px 30px #1747e814}
+.brand{font-weight:900;letter-spacing:.04em;color:var(--ink)}.brand small{color:var(--red);font-weight:800}
+.btn,.secondary{border-radius:14px}.btn{background:linear-gradient(135deg,#1747e8,#4f7bff);border:0;box-shadow:0 8px 20px #1747e840;transition:transform .15s,box-shadow .15s}.btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px #1747e855}
+.secondary:hover{border-color:var(--red);color:var(--red)}
+.head h1{color:var(--ink)}.eyebrow{color:var(--red)}
+.metric,.panel,.card{background:#ffffffee;border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 34px #1747e810}
+.metric{padding:18px 20px}.metric strong{color:var(--ink);font-size:28px}.metric small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.metrics.six{grid-template-columns:repeat(6,1fr)}
+.tabs{flex-wrap:wrap}.tabs button{border-radius:99px;background:#fff;color:var(--ink);font-weight:700}.tabs button.active{background:var(--red);border-color:var(--red)}
+.thumb{border-radius:10px;object-fit:contain;background:#f3f6ff}
+.pill{background:#e8f0ff;color:var(--red)}.pill.published,.pill.verified,.pill.completed,.pill.ok{background:#e3f6ec;color:var(--green)}.pill.pending,.pill.payment_pending,.pill.new,.pill.low{background:#fff1dc;color:#8a5a00}.pill.rejected,.pill.cancelled,.pill.out{background:#ffe6e3;color:#b42318}.pill.processing,.pill.ready,.pill.dispatched{background:#e8f0ff;color:var(--red)}
+dialog{border-radius:22px}.field,.formgrid input,.formgrid select,.formgrid textarea,.login input{border-radius:12px;border-color:var(--line)}
+th{color:var(--muted)}tr:hover td{background:#f6f9ff}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}.grid2b{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{padding:18px;margin-bottom:18px;overflow:auto}.card h3{margin:0 0 12px;font-size:17px;color:var(--ink)}
+.chart{display:flex;align-items:flex-end;gap:6px;height:170px;padding-top:10px}.chart .b{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;height:100%;min-width:0}.chart .b i{display:block;width:100%;border-radius:8px 8px 3px 3px;background:linear-gradient(#4f7bff,#1747e8);min-height:2px}.chart .b span{font-size:10px;color:var(--muted)}.chart .b em{font-style:normal;font-size:10px;color:var(--ink);font-weight:700}
+.list{list-style:none;margin:0;padding:0}.list li{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.list li:last-child{border:0}
+.quick{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.sfgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.sfgrid label{display:block;font-weight:700;font-size:12px;margin:10px 0 0}.sfgrid input[type=text],.sfgrid input[type=number],.sfgrid select{width:100%;padding:10px;margin-top:5px;border:1px solid var(--line);border-radius:12px;font:inherit}
+.chk{display:flex!important;align-items:center;gap:8px;font-weight:600!important}.chk input{width:auto}
+.ok-msg{color:var(--green);font-weight:700}
+@media(max-width:1000px){.metrics.six{grid-template-columns:repeat(3,1fr)}.grid2,.grid2b,.sfgrid{grid-template-columns:1fr}}
+@media(max-width:560px){.metrics.six{grid-template-columns:repeat(2,1fr)}}
