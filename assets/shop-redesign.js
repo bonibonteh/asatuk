@@ -83,4 +83,27 @@
   $('tour-close')&&($('tour-close').onclick=function(){$('tour-dialog').close()});
   $('tour-dialog')&&$('tour-dialog').addEventListener('close',stop);
   document.addEventListener('click',function(e){if(e.target.closest('#tour-slide [data-details]'))$('tour-dialog').close()});
+
+  /* ---- storefront settings (managed from the Merchandise Dashboard) + order tracking ---- */
+  (function(){
+    var tries=0;(function wait(){var db=window.ASA_DB;if(!db){if(tries++<50)return setTimeout(wait,100);return}
+      db.from('storefront_settings').select('key,value').then(function(res){
+        var s={};(res.data||[]).forEach(function(x){s[x.key]=x.value||{}});
+        var b=s.banner;if(b&&b.active&&b.text){var el=$('sf-banner');if(el){el.textContent=b.text;el.hidden=false}}
+        var pm=s.promo_message;if(pm&&pm.text){var badge=document.querySelector('.pill-badge');if(badge){var sv=badge.querySelector('svg');badge.innerHTML=(sv?sv.outerHTML:'')+' '+esc(pm.text)}}
+        var a=s.announcement;if(a&&a.active&&a.text){var c=$('catalogue'),n=document.createElement('p');n.id='sf-note';n.textContent=a.text;c&&c.insertBefore(n,c.querySelector('.chips'))}
+        var h=(s.hidden_categories&&s.hidden_categories.list)||[];
+        h.forEach(function(cat){document.querySelectorAll('.catcard[data-cat="'+cat+'"],.chip[data-chip="'+cat+'"],.dd-menu [data-cat="'+cat+'"]').forEach(function(x){x.hidden=true})});
+        var cp=s.campaign;if(cp&&cp.active&&cp.title){var p4=document.querySelector('.promo.p4');if(p4){p4.querySelector('small').textContent=cp.label||'Limited-Time Offer';p4.querySelector('h3').textContent=cp.title}}
+      });
+    })();
+    var open=$('track-open'),dlg=$('track-dialog');
+    open&&open.addEventListener('click',function(){dlg.showModal()});
+    var labels={new:'Received',payment_pending:'Awaiting payment verification',processing:'Being prepared',ready:'Ready for collection',dispatched:'Dispatched',completed:'Completed',cancelled:'Cancelled'},pl={pending:'Payment not yet verified',verified:'Payment confirmed',rejected:'Payment could not be verified'};
+    var f=$('track-form');f&&f.addEventListener('submit',function(e){e.preventDefault();var out=$('track-out');out.textContent='Checking…';
+      window.ASA_DB.rpc('track_merchandise_order',{p_order_number:$('track-no').value,p_email:$('track-email').value}).then(function(r){
+        var o=r.data;if(r.error||!o){out.textContent='No order found for those details. Check the order number and email.';return}
+        out.innerHTML='<p><b>'+esc(o.order_number)+'</b> · '+money(o.total_ksh)+'</p><p>Order: <b>'+esc(labels[o.order_status]||o.order_status)+'</b><br>Payment: <b>'+esc(pl[o.payment_status]||o.payment_status)+'</b>'+(o.payment_note?'<br><small>'+esc(o.payment_note)+'</small>':'')+'</p><ul>'+(o.items||[]).map(function(i){return '<li>'+esc(i.name)+' × '+i.quantity+'</li>'}).join('')+'</ul>';
+      })});
+  })();
 })();
