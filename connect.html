@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ASA TUK Connect | Council Meetings</title><link rel="icon" href="assets/favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/admin-config.js"></script>
+<script src="assets/auth-session.js"></script>
+<script src="assets/auth-ui.js"></script>
+<link rel="stylesheet" href="assets/connect.css">
+<script src="assets/connect.js" defer></script>
+</head>
+<body>
+<main id="login" class="cx-login"><section class="cx-logincard"><h1>ASA TUK Connect</h1><p>Sign in with your council account.</p>
+<form id="login-form" method="post" action="#"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button class="cx-primary" type="submit">Sign in</button></form><p id="login-msg" role="status"></p><a href="council-hub.html">← Council Hub</a></section></main>
+<div id="app" hidden>
+<header class="cx-bar"><div class="cx-brand"><b>ASA TUK Connect</b><small>Council Workspace</small></div><a href="council-hub.html">← Council Hub</a><span class="cx-sp"></span><span id="cx-who"></span><button id="signout" class="cx-ghost-w">Sign out</button></header>
+<section class="cx-hero"><div><h1>Council Meetings</h1><p>Meetings, decisions and accountability.</p><label class="cx-chap">Chapter <select id="cx-chapter"><option value="all">All chapters</option><option>Architecture</option><option>Urban Planning</option></select></label></div><div class="cx-stats" id="cx-stats"></div></section>
+<p id="cx-notice" role="status"></p>
+<div class="cx-grid"><aside class="cx-card"><div class="cx-h"><h2>Meetings</h2><button id="cx-new" class="cx-primary" hidden>＋ Schedule</button></div>
+<div class="cx-chips" id="cx-chips"><button data-f="all" class="on">All</button><button data-f="upcoming">Upcoming</button><button data-f="completed">Completed</button><button data-f="pending">Minutes pending</button></div>
+<input id="cx-q" type="search" placeholder="Search meetings…"><ul id="cx-meetings"></ul></aside>
+<section><nav id="cx-tabs"><button data-t="room" class="on">Meeting room</button><button data-t="transcript">Transcript</button><button data-t="minutes">Minutes &amp; actions</button><button data-t="health" id="cx-health-tab" hidden>System health</button></nav>
+<div id="cx-head"></div><div id="cx-t-room" class="cx-tab"></div><div id="cx-t-transcript" class="cx-tab" hidden></div><div id="cx-t-minutes" class="cx-tab" hidden></div><div id="cx-t-health" class="cx-tab" hidden></div></section></div></div>
+<dialog id="cx-dlg"><form id="cx-form" method="dialog"><h2>Schedule a meeting</h2><label>Title<input name="title" required minlength="3" maxlength="180"></label><div class="cx-row"><label>Chapter<select name="chapter"><option value="">All chapters</option><option>Architecture</option><option>Urban Planning</option></select></label><label>Date &amp; time<input name="starts" type="datetime-local" required></label></div><label>Meeting link (optional)<input name="link" type="url"></label><label>Agenda<textarea name="agenda" rows="3" maxlength="10000"></textarea></label><p id="cx-dmsg"></p><div class="cx-row"><button class="cx-primary" type="submit">Schedule</button><button type="button" id="cx-dx" class="cx-ghost">Cancel</button></div></form></dialog>
+</body></html>
