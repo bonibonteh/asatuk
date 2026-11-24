@@ -1,7 +1,7 @@
 (function(){'use strict';
 const $=id=>document.getElementById(id),cfg=window.ASATUK_SUPABASE;
 if(!window.supabase||!cfg||!window.ASATUKAuth){$('login-msg').textContent='Configuration failed to load. Refresh.';return}
-const db=window.ASATUKAuth.getClient(cfg);let user=null,isSG=false,all=[],cur=null,filt='all',tab='room',stats={drafts:{},props:{}};
+const db=window.ASATUKAuth.getClient(cfg);let lastSig='',user=null,isSG=false,all=[],cur=null,filt='all',tab='room',stats={drafts:{},props:{}};
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const say=(m,bad)=>{$('cx-notice').textContent=m||'';$('cx-notice').style.color=bad?'#b91c1c':'#166534'};
 const rpc=async(n,a)=>{const r=await db.rpc(n,a);if(r.error)throw r.error;return r.data};
@@ -17,11 +17,11 @@ function drawStats(){const v=all.filter(inChap),now=Date.now();
 function drawList(){const v=visible();$('cx-meetings').innerHTML=v.map(m=>'<li><button data-id="'+m.id+'" class="'+(cur&&cur.id===m.id?'on':'')+'"><b>'+esc(m.title)+'</b><br><small>'+new Date(m.starts_at).toLocaleString()+'</small><br>'+pill(m.status,sc(m.status))+' '+pill(m.chapter||'All chapters','chap')+(stats.drafts[m.id]?' '+pill('Minutes pending','warn'):'')+'</button></li>').join('')||'<li><small>No meetings here yet.'+(isSG?' Use “Schedule”.':'')+'</small></li>';
  $('cx-meetings').querySelectorAll('button').forEach(b=>b.onclick=()=>{cur=all.find(m=>m.id===b.dataset.id);drawList();render()})}
 async function invites(){const r=await db.from('connect_notifications').select('id,message,meeting_id').eq('user_id',user.id).is('read_at',null).order('created_at',{ascending:false}).limit(10);const d=r.data||[];
- $('cx-invites').innerHTML=d.length?'<div class="cx-invite"><b>📅 You have '+d.length+' meeting'+(d.length>1?'s':'')+' to attend</b>'+d.map(x=>'<div>'+esc(x.message)+' <button class="cx-ghost" data-m="'+x.meeting_id+'" data-n="'+x.id+'">Open</button></div>').join('')+'<button class="cx-ghost" id="cx-allread">Mark all as read</button></div>':'';
+ const isig=JSON.stringify(d);if(isig===$('cx-invites').dataset.sig)return;$('cx-invites').dataset.sig=isig;$('cx-invites').innerHTML=d.length?'<div class="cx-invite"><b>📅 You have '+d.length+' meeting'+(d.length>1?'s':'')+' to attend</b>'+d.map(x=>'<div>'+esc(x.message)+' <button class="cx-ghost" data-m="'+x.meeting_id+'" data-n="'+x.id+'">Open</button></div>').join('')+'<button class="cx-ghost" id="cx-allread">Mark all as read</button></div>':'';
  $('cx-invites').querySelectorAll('[data-n]').forEach(b=>b.onclick=async()=>{cur=all.find(m=>m.id===b.dataset.m)||cur;await rpc('connect_mark_read',{p_id:b.dataset.n});setTab('room');drawList();invites()});
  const ar=$('cx-allread');if(ar)ar.onclick=async()=>{await rpc('connect_mark_read',{});invites()}}
-async function loadAll(){const [m,o,a]=await Promise.all([db.from('council_meetings').select('id,title,starts_at,status,meeting_link,agenda,chapter').order('starts_at',{ascending:false}).limit(200),db.from('connect_ai_outputs').select('meeting_id').eq('status','draft'),db.from('connect_action_points').select('meeting_id').eq('status','proposed')]);
- if(m.error){say('Could not load meetings: '+m.error.message,1);return}all=m.data||[];stats={drafts:{},props:{}};(o.data||[]).forEach(x=>stats.drafts[x.meeting_id]=1);(a.data||[]).forEach(x=>stats.props[x.meeting_id]=(stats.props[x.meeting_id]||0)+1);
+async function loadAll(force){const [m,o,a]=await Promise.all([db.from('council_meetings').select('id,title,starts_at,status,meeting_link,agenda,chapter').order('starts_at',{ascending:false}).limit(200),db.from('connect_ai_outputs').select('meeting_id').eq('status','draft'),db.from('connect_action_points').select('meeting_id').eq('status','proposed')]);
+ if(m.error){say('Could not load meetings: '+m.error.message,1);return}const sig=JSON.stringify([m.data,o.data,a.data]);if(!force&&sig===lastSig)return;lastSig=sig;all=m.data||[];stats={drafts:{},props:{}};(o.data||[]).forEach(x=>stats.drafts[x.meeting_id]=1);(a.data||[]).forEach(x=>stats.props[x.meeting_id]=(stats.props[x.meeting_id]||0)+1);
  if(cur)cur=all.find(x=>x.id===cur.id)||null;drawStats();drawList();render();invites().catch(()=>{})}
 function setTab(t){tab=t;document.querySelectorAll('#cx-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));render()}
 async function render(){document.querySelectorAll('.cx-tab').forEach(x=>x.hidden=x.id!=='cx-t-'+tab);
@@ -46,10 +46,10 @@ async function minutes(){const [o,a]=await Promise.all([db.from('connect_ai_outp
  const side='<div><div class="cx-box"><h3>Action points ('+(a.data||[]).length+')</h3>'+((a.data||[]).map(x=>'<div class="cx-seg"><b>'+esc(x.title)+'</b> '+pill(x.status,sc(x.status))+'<br><small>'+esc(x.docket)+(x.due_date?' · due '+x.due_date:'')+(x.task_id?' · task created':'')+'</small>'+(isSG&&x.status==='proposed'?'<br><button class="cx-primary" data-aa="'+x.id+'">Approve &amp; create task</button>':'')+'</div>').join('')||'<p>None yet.</p>')+'</div>'+
  '<div class="cx-box"><h3>Minutes versions</h3>'+((o.data||[]).map(x=>'<div class="cx-seg"><b>v'+x.version+'</b> '+pill(x.status,sc(x.status))+'<div>'+esc(x.summary)+'</div>'+(isSG&&x.status==='draft'?'<button class="cx-primary" data-ap="'+x.id+'">Approve</button> <button class="bad" data-rj="'+x.id+'">Reject</button>':'')+'</div>').join('')||'<p>No drafts yet.</p>')+'</div></div>';
  $('cx-t-minutes').innerHTML='<div class="cx-two">'+form+side+'</div>';
- if(isSG){$('d-save').onclick=()=>{const t=$('d-act').value.trim();act(()=>rpc('connect_save_draft',{p_meeting:cur.id,p_summary:$('d-sum').value,p_decisions:[],p_actions:t?[{title:t,docket:$('d-dk').value,due_date:$('d-due').value}]:[],p_model:null}),'Draft saved.',loadAll)};
- document.querySelectorAll('[data-ap]').forEach(b=>b.onclick=()=>act(()=>rpc('connect_approve_minutes',{p_output:b.dataset.ap}),'Minutes approved and archived.',loadAll));
- document.querySelectorAll('[data-rj]').forEach(b=>b.onclick=()=>act(()=>rpc('connect_reject_draft',{p_output:b.dataset.rj}),'Draft rejected.',loadAll));
- document.querySelectorAll('[data-aa]').forEach(b=>b.onclick=()=>act(()=>rpc('connect_approve_action',{p_id:b.dataset.aa}),'Approved; task created once and assignee notified.',loadAll))}}
+ if(isSG){$('d-save').onclick=()=>{const t=$('d-act').value.trim();act(()=>rpc('connect_save_draft',{p_meeting:cur.id,p_summary:$('d-sum').value,p_decisions:[],p_actions:t?[{title:t,docket:$('d-dk').value,due_date:$('d-due').value}]:[],p_model:null}),'Draft saved.',()=>loadAll(true))};
+ document.querySelectorAll('[data-ap]').forEach(b=>b.onclick=()=>act(()=>rpc('connect_approve_minutes',{p_output:b.dataset.ap}),'Minutes approved and archived.',()=>loadAll(true)));
+ document.querySelectorAll('[data-rj]').forEach(b=>b.onclick=()=>act(()=>rpc('connect_reject_draft',{p_output:b.dataset.rj}),'Draft rejected.',()=>loadAll(true)));
+ document.querySelectorAll('[data-aa]').forEach(b=>b.onclick=()=>act(()=>rpc('connect_approve_action',{p_id:b.dataset.aa}),'Approved; task created once and assignee notified.',()=>loadAll(true)))}}
 async function health(){const el=$('cx-t-health');el.innerHTML='<p class="cx-box">Checking…</p>';let h;try{h=await rpc('connect_health')}catch(e){el.innerHTML='<p class="cx-box">Database check failed: '+esc(e.message)+'</p>';return}
  el.innerHTML='<div class="cx-box"><b>Supabase database</b> '+pill('ok','ok')+'<br><small>Checked '+new Date(h.checked_at).toLocaleTimeString()+'</small></div><div class="cx-box"><b>LiveKit video</b> '+pill('not connected','warn')+'<br><small>Set LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET as Supabase secrets and deploy connect-livekit-token.</small></div>'+
  '<div class="cx-box"><h3>Counts</h3>Pending jobs <b>'+h.pending_jobs+'</b> · Failed jobs <b>'+h.failed_jobs+'</b> · Failed recordings <b>'+h.failed_recordings+'</b> · Notification failures <b>'+h.failed_notifications+'</b></div><div class="cx-box"><h3>Recent errors</h3>'+((h.recent_errors||[]).map(e=>'<div class="cx-seg"><small>'+new Date(e.created_at).toLocaleString()+' · '+esc(e.service)+'</small><div>'+esc(e.message)+'</div></div>').join('')||'<p>No errors recorded.</p>')+'</div>'}
@@ -58,14 +58,14 @@ async function start(u){user=u;try{
  const adm=!!(a.data&&a.data.role==='admin'&&!a.data.is_suspended),as=c.data||[];if(!adm&&!as.length){$('login-msg').textContent='This account has no council role.';return}
  isSG=adm||as.some(x=>x.docket==='Secretariat'&&(x.is_docket_head||/secretary/i.test(x.role_title)));
  const mine=as.map(x=>x.chapter).filter(x=>x==='Architecture'||x==='Urban Planning');if(!adm&&mine.length&&!as.some(x=>x.chapter==='Association'))$('cx-chapter').value=mine[0];
- $('cx-who').textContent=(as[0]&&as[0].display_name)||u.email;$('cx-health-tab').hidden=!isSG;$('cx-new').hidden=!isSG;$('login').hidden=true;$('app').hidden=false;await loadAll()}catch(e){$('login-msg').textContent='Could not load: '+(e.message||e)}}
+ $('cx-who').textContent=(as[0]&&as[0].display_name)||u.email;$('cx-health-tab').hidden=!isSG;$('cx-new').hidden=!isSG;$('login').hidden=true;$('app').hidden=false;await loadAll(true)}catch(e){$('login-msg').textContent='Could not load: '+(e.message||e)}}
 document.querySelectorAll('#cx-tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 document.querySelectorAll('#cx-chips button').forEach(b=>b.onclick=()=>{filt=b.dataset.f;document.querySelectorAll('#cx-chips button').forEach(x=>x.classList.toggle('on',x===b));drawList()});
 $('cx-q').oninput=drawList;$('cx-chapter').onchange=()=>{if(cur&&!inChap(cur))cur=null;drawStats();drawList();render()};
 $('cx-new').onclick=()=>{$('cx-form').reset();if($('cx-chapter').value!=='all')$('cx-form').chapter.value=$('cx-chapter').value;$('cx-dmsg').textContent='';$('cx-dlg').showModal()};$('cx-dx').onclick=()=>$('cx-dlg').close();
 $('cx-form').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget,v=f.elements;$('cx-dmsg').textContent='Saving…';
  const r=await db.from('council_meetings').insert({title:v.title.value.trim(),meeting_type:'Council meeting',starts_at:new Date(v.starts.value).toISOString(),venue:'',meeting_link:v.link.value.trim(),agenda:v.agenda.value,status:'scheduled',created_by:user.id,published:true,chapter:v.chapter.value||null}).select('id').single();
- if(r.error){$('cx-dmsg').textContent=r.error.message;return}$('cx-dlg').close();say('Meeting scheduled.');await loadAll()});
+ if(r.error){$('cx-dmsg').textContent=r.error.message;return}$('cx-dlg').close();say('Meeting scheduled.');await loadAll(true)});
 $('signout').onclick=async()=>{await window.ASATUKAuth.signOut(db);location.reload()};
 $('login-form').addEventListener('submit',async e=>{e.preventDefault();$('login-msg').textContent='Signing in…';const r=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(r.error){$('login-msg').textContent=r.error.message;return}start(r.data.user)});
 db.auth.getSession().then(({data})=>{if(data&&data.session)start(data.session.user)});
