@@ -135,8 +135,8 @@ function wire(){
   $('sf-form').onsubmit=sfSave;$('cu-search').oninput=customers;
   document.addEventListener('merch-data',renderAll);
   document.addEventListener('click',function(e){var t=e.target.closest('[data-tab]');if(t&&['overview','inventory','reports','customers','storefront','activity'].indexOf(t.dataset.tab)>-1&&!state.loaded)loadExtra().then(renderAll)});
-  setInterval(function(){if(D&&!document.hidden&&$('app')&&!$('app').classList.contains('hidden'))D.reload().then(function(){return loadExtra()}).then(renderAll)},60000);
+  var lastSig='';setInterval(function(){if(D&&!document.hidden&&$('app')&&!$('app').classList.contains('hidden'))D.reload().then(function(){return loadExtra()}).then(function(){var g=JSON.stringify([D.products(),D.orders(),state.movements.length,state.audit.length]);if(g!==lastSig){lastSig=g;renderAll()}})},120000);
 }
-var started=false;async function init(){if(started||!window.MerchDash)return;started=true;D=window.MerchDash;wire();await loadExtra();renderAll()}
+var started=false;async function init(){if(started||!window.MerchDash)return;started=true;D=window.MerchDash;wire();renderAll();loadExtra().then(renderAll).catch(function(){})}
 document.addEventListener('merch-ready',init);init();
 })();
