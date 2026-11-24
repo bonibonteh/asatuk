@@ -108,6 +108,58 @@
 
   function lastLinkError() { return linkErrorResult; }
 
+
+  /* ---- Sign-in flash prevention ------------------------------------------------------------
+     Root cause of the flash: every workspace ships with its sign-in panel visible, and the page
+     only hides it after the Supabase library has loaded and getSession() has resolved (and, on
+     some pages, after role lookups). A returning user therefore saw the sign-in page for a moment.
+     Fix: if this browser holds a stored session, keep the sign-in panel hidden behind a branded
+     loader until the page itself either shows the workspace, or genuinely needs the sign-in form
+     (no session, session rejected, access denied, error). This is cosmetic only: access is still
+     decided by Supabase and database policies, never by this flag. */
+  var PENDING = 'asa-auth-pending', pendingTimer = null;
+  function settle() {
+    try { root.document.documentElement.classList.remove(PENDING); } catch (_) {}
+    if (pendingTimer) { clearTimeout(pendingTimer); pendingTimer = null; }
+  }
+  function hasStoredSession(storage, key) {
+    try {
+      var raw = storage && storage.getItem(key); if (!raw) return false;
+      var v = JSON.parse(raw); return !!(v && (v.refresh_token || v.access_token));
+    } catch (_) { return false; }
+  }
+  function startPendingGuard() {
+    try {
+      var doc = root.document, cfg = root.ASATUK_SUPABASE, st = safeStorage();
+      if (!doc || !doc.documentElement || !doc.documentElement.classList || !cfg || !cfg.url || !st) return;
+      if (/[?#&](type=recovery|access_token=|error=)/.test(String(root.location && (root.location.hash + root.location.search)))) return;
+      var key = storageKeyFor(cfg.url);
+      if (!hasStoredSession(st, key) && !hasStoredSession(st, LEGACY_KEYS[0])) return;
+      var css = doc.createElement('style');
+      css.textContent = 'html.' + PENDING + ' #login{display:none!important}' +
+        'html.' + PENDING + ' body::before{content:"";position:fixed;inset:0;z-index:99998;background:#f1efe9 url(assets/logo.png) center 42%/76px no-repeat}' +
+        'html.' + PENDING + ' body::after{content:"";position:fixed;left:50%;top:calc(42% + 62px);width:26px;height:26px;margin-left:-13px;z-index:99999;border:3px solid #d9d6cc;border-top-color:#a73a2e;border-radius:50%;animation:asaspin .8s linear infinite}' +
+        '@keyframes asaspin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){html.' + PENDING + ' body::after{animation:none}}';
+      (doc.head || doc.documentElement).appendChild(css);
+      doc.documentElement.classList.add(PENDING);
+      pendingTimer = setTimeout(settle, 8000); /* failsafe: never trap the user behind the loader */
+      var watch = function () {
+        var login = doc.getElementById && doc.getElementById('login'), msg = doc.getElementById('login-msg');
+        if (!login || typeof root.MutationObserver !== 'function') return;
+        var check = function () {
+          if (!doc.documentElement.classList.contains(PENDING)) return;
+          var shown = login.hidden === true || /display:\s*none/.test(login.getAttribute('style') || '');
+          if (shown || (msg && msg.textContent.trim())) settle();
+        };
+        new root.MutationObserver(check).observe(login, { attributes: true, subtree: true, childList: true, characterData: true });
+        var app = doc.getElementById('app') || doc.getElementById('dashboard');
+        if (app) new root.MutationObserver(function () { if (!app.hidden) settle(); }).observe(app, { attributes: true, attributeFilter: ['hidden'] });
+      };
+      if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', watch); else watch();
+    } catch (_) { settle(); }
+  }
+  startPendingGuard();
+
   /* The one Supabase client for this page. */
   function getClient(cfg, deps) {
     deps = deps || {};
@@ -124,6 +176,13 @@
       auth: { storageKey: key, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });
     holder[CLIENT_SLOT].__asatukStorageKey = key;
+    try {
+      var auth = holder[CLIENT_SLOT].auth, orig = auth.getSession.bind(auth), inflight = null;
+      auth.getSession = function () { /* concurrent callers share one request */
+        if (!inflight) inflight = Promise.resolve(orig()).then(function (r) { inflight = null; if (!(r && r.data && r.data.session)) settle(); return r; }, function (e) { inflight = null; settle(); throw e; });
+        return inflight;
+      };
+    } catch (_) { /* leave the client untouched */ }
     return holder[CLIENT_SLOT];
   }
 
@@ -149,6 +208,6 @@
   return {
     LEGACY_KEYS: LEGACY_KEYS, storageKeyFor: storageKeyFor, migrateLegacySession: migrateLegacySession,
     parseLinkError: parseLinkError, consumeLinkError: consumeLinkError, lastLinkError: lastLinkError,
-    getClient: getClient, signOut: signOut
+    getClient: getClient, signOut: signOut, settle: settle
   };
 });

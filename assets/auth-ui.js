@@ -35,6 +35,7 @@
     });
   }
   function showDenied({rootId='login',formId='login-form',messageId='login-msg',message='You are signed in, but this account is not assigned to this workspace.',links=[],retry=null,signOut=true}={}){
+    if(window.ASATUKAuth&&window.ASATUKAuth.settle)window.ASATUKAuth.settle();
     const root=document.getElementById(rootId),form=document.getElementById(formId),msg=document.getElementById(messageId);
     if(form) form.hidden=true;
     const forgot=document.getElementById('forgot');if(forgot)forgot.hidden=true;
