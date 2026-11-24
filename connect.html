@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ASA TUK Connect | Meetings &amp; Governance</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/admin-config.js"></script>
+<script src="assets/auth-session.js"></script>
+<script src="assets/auth-ui.js"></script>
+<script src="assets/connect.js" defer></script>
+<link rel="stylesheet" href="assets/connect.css">
+</head>
+<body>
+<main id="login" class="cx-login"><section class="cx-card"><h1>ASA TUK Connect</h1><p>Sign in with your council account.</p>
+<form id="login-form" method="post" action="#"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button type="submit">Sign in</button></form><p id="login-msg" role="status"></p><a href="council-hub.html">← Council Hub</a></section></main>
+<div id="app" hidden>
+<header class="cx-top"><b>ASA TUK Connect</b><span id="who"></span><a href="council-hub.html">Council Hub</a><button id="signout">Sign out</button></header>
+<p id="notice" role="status" class="cx-notice"></p>
+<div class="cx-grid"><aside><h2>Meetings</h2><ul id="meetings"></ul></aside>
+<section><nav id="tabs"><button data-t="room" class="on">Meeting room</button><button data-t="transcript">Transcript</button><button data-t="minutes">Minutes &amp; actions</button><button data-t="health" id="health-tab" hidden>System health</button></nav>
+<div id="t-room" class="tab"></div><div id="t-transcript" class="tab" hidden></div><div id="t-minutes" class="tab" hidden></div><div id="t-health" class="tab" hidden></div></section></div></div>
+</body></html>
