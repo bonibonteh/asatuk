@@ -13,3 +13,4 @@ button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--lin
 #cx-head h2{margin:0}.cx-pill{display:inline-block;padding:2px 10px;border-radius:99px;background:#e5e7eb;font-size:12px}.cx-pill.ok{background:#dcf2e4}.cx-pill.err{background:#fde0de}.cx-pill.warn{background:#fdecd2}.cx-pill.chap{background:#e0e7ff}
 .cx-row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.cx-row>*{flex:1 1 150px}.cx-two{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px}.cx-seg{border-bottom:1px solid #eef0f4;padding:8px 0}.cx-seg small{color:#64748b}
 dialog{border:0;border-radius:14px;width:min(560px,94vw);box-shadow:0 20px 60px #0004}@media(max-width:900px){.cx-grid,.cx-two{grid-template-columns:minmax(0,1fr)}}
+.cx-invite{margin:12px 24px 0;padding:14px 16px;border-radius:14px;background:#fff7e0;border:1px solid #f0d58a}.cx-invite div{margin:6px 0}
