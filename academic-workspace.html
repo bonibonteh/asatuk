@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ASA TUK Academic Command Centre</title><link rel="icon" href="assets/favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/admin-config.js"></script>
+<script src="assets/auth-session.js"></script>
+<script src="assets/auth-ui.js"></script>
+<link rel="stylesheet" href="assets/academic-workspace.css">
+<script src="assets/academic-workspace.js" defer></script>
+</head>
+<body>
+<main id="login" class="ac-login"><section class="ac-logincard"><img src="assets/logo.png" alt="" width="56"><h1>Academic Command Centre</h1><p>Sign in with your authorised ASA TUK account.</p>
+<form id="login-form" method="post" action="#"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button class="ac-btn" type="submit">Sign in</button></form><p id="login-msg" role="status"></p><a href="council-hub.html">← Council Hub</a></section></main>
+<div id="app" class="ac-shell" hidden>
+<aside id="ac-side"><div class="ac-brand"><img src="assets/logo.png" alt="" width="34"><div><b>ASA TUK</b><small>Academic Command Centre</small></div><button id="ac-collapse" class="ac-icon" title="Collapse menu" aria-label="Collapse menu">«</button></div><nav id="ac-nav"></nav></aside>
+<div class="ac-main"><header class="ac-top"><button id="ac-burger" class="ac-icon ac-only-m" aria-label="Menu">☰</button><div class="ac-greet"><b id="ac-hello"></b><small id="ac-date"></small></div><span class="ac-sp"></span>
+<div class="ac-bellwrap"><button id="ac-bell" class="ac-icon" aria-label="Notifications">🔔<i id="ac-badge" hidden>0</i></button><div id="ac-notif" class="ac-pop" hidden></div></div>
+<button id="ac-set" class="ac-icon" aria-label="Settings">⚙</button>
+<div class="ac-bellwrap"><button id="ac-prof" class="ac-profile"><img id="ac-avatar" alt="" width="34" height="34"><span id="ac-pname"></span></button><div id="ac-pmenu" class="ac-pop" hidden></div></div></header>
+<p id="ac-msg" role="status"></p><div id="ac-view"></div></div></div>
+<dialog id="ac-dlg"><form id="ac-form" method="dialog"></form></dialog>
+</body></html>
