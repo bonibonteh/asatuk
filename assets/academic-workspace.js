@@ -15,7 +15,7 @@ const today=()=>ymd(new Date());
 const acYear=()=>{const n=new Date(),y=n.getFullYear();return n.getMonth()>=8?y+'/'+(y+1):(y-1)+'/'+y};
 const pill=(t,c)=>'<span class="pill '+(c||'')+'">'+esc(t)+'</span>';
 const rpcq=async q=>{const r=await q;if(r.error)throw r.error;return r.data};
-const NAV=[['overview','🏠','Overview'],['calendar','📅','Academic Calendar'],['timetables','🗓️','Timetable Verification'],['exams','📝','Exams & Revision'],['resources','📚','Learning Resources'],['notices','📣','Academic Notices'],['cohorts','🎓','Course & Cohort Management'],['staff','🤝','Academic Staff Coordination'],['support','💬','Student Academic Support'],['reports','📊','Academic Reports'],['meetings','🧑‍🤝‍🧑','Meetings, Minutes & Correspondence'],['tasks','✅','Tasks & Reminders'],['docs','🗂️','Document Repository'],['settings','⚙️','Settings']];
+const NAV=[['overview','','Overview'],['calendar','','Academic Calendar'],['timetables','','Timetable Verification'],['exams','','Exams & Revision'],['resources','','Learning Resources'],['notices','','Academic Notices'],['cohorts','','Course & Cohort Management'],['staff','','Academic Staff Coordination'],['support','','Student Academic Support'],['reports','','Academic Reports'],['meetings','','Meetings, Minutes & Correspondence'],['tasks','','Tasks & Reminders'],['docs','','Document Repository'],['settings','','Settings']];
 async function act(fn,ok,after){try{await fn();if(ok)say(ok);if(after)await after()}catch(e){say(e.message||String(e),1)}}
 function ask(title,html,onOk,okLabel){const f=$('ac-form');f.innerHTML='<h2>'+esc(title)+'</h2>'+html+'<p id="ac-dm" style="color:#c0392b"></p><div class="ac-row"><button class="ac-btn" type="submit" value="ok">'+(okLabel||'Save')+'</button><button class="ac-ghost" type="button" id="ac-dx">Cancel</button></div>';
  $('ac-dx').onclick=()=>$('ac-dlg').close();f.onsubmit=async e=>{e.preventDefault();const b=f.querySelector('button[type=submit]');b.disabled=true;try{await onOk(f.elements);$('ac-dlg').close()}catch(x){$('ac-dm').textContent=x.message||String(x)}finally{b.disabled=false}};$('ac-dlg').showModal()}
@@ -56,7 +56,7 @@ async function upload(bucket,path,file){const x=await db.storage.from(bucket).up
 const clean=n=>n.replace(/[^A-Za-z0-9._-]/g,'_').slice(-110);
 const nameOf=id=>{const s=S.staff.find(x=>x.user_id===id);return s?s.display_name:(id===S.user.id?'You':'')};
 /* ---------- shell ---------- */
-function nav(){$('ac-nav').innerHTML=NAV.map(n=>'<button data-s="'+n[0]+'" class="'+(S.sec===n[0]?'on':'')+'"><span class="em">'+n[1]+'</span><span class="t">'+n[2]+'</span></button>').join('');
+function nav(){$('ac-nav').innerHTML=NAV.map(n=>'<button data-s="'+n[0]+'" class="'+(S.sec===n[0]?'on':'')+'"><span class="em">'+n[2].charAt(0)+'</span><span class="t">'+n[2]+'</span></button>').join('');
  $('ac-nav').querySelectorAll('button').forEach(b=>b.onclick=()=>go(b.dataset.s))}
 async function go(s){S.sec=s;nav();$('ac-side').classList.remove('open');history.replaceState(null,'','#'+s);const v=$('ac-view');v.innerHTML='<p class="ac-box">Loading…</p>';
  try{await SEC[s](v)}catch(e){v.innerHTML='<div class="ac-box"><h2>Could not load this section</h2><p>'+esc(e.message||e)+'</p></div>'}}
