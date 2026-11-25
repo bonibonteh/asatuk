@@ -13,7 +13,7 @@ input[type=color]{padding:2px;height:38px}input[type=checkbox]{width:auto}
 .ac-brand{display:flex;gap:10px;align-items:center;margin-bottom:18px}.ac-brand b{display:block;color:#fff}.ac-brand small{opacity:.7;font-size:11px}.ac-brand div{flex:1;min-width:0}
 .ac-shell.col .ac-brand div,.ac-shell.col #ac-nav span.t{display:none}
 #ac-nav button{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:transparent;border:0;color:inherit;padding:10px 12px;border-radius:12px;margin-bottom:3px;font:inherit;cursor:pointer;transition:background .15s}
-#ac-nav button:hover{background:#ffffff14}#ac-nav button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}#ac-nav .em{width:22px;text-align:center}
+#ac-nav button:hover{background:#ffffff14}#ac-nav button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}#ac-nav .em{display:none}.ac-shell.col #ac-nav .em{display:block;width:100%;text-align:center;font-weight:700}
 .ac-icon{background:var(--card);border:1px solid var(--line);border-radius:12px;width:40px;height:40px;cursor:pointer;color:var(--txt);position:relative;font-size:16px}#ac-side .ac-icon{background:#ffffff14;border:0;color:#fff;width:30px;height:30px}
 .ac-main{padding:0 24px 40px;min-width:0}.ac-top{display:flex;gap:10px;align-items:center;padding:16px 0}.ac-greet b{display:block;font-size:20px}.ac-greet small{color:var(--mut)}.ac-sp{flex:1}
 .ac-profile{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px 12px 4px 4px;cursor:pointer;color:var(--txt);font:inherit}.ac-profile img{border-radius:50%;object-fit:cover;background:#ddd}
