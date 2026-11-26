@@ -23,4 +23,15 @@ document.addEventListener('click',function(e){
  var a=o.animate([{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px',borderRadius:'24px'},{left:'0px',top:'0px',width:innerWidth+'px',height:innerHeight+'px',borderRadius:'0px'}],{duration:480,easing:'cubic-bezier(.7,0,.2,1)',fill:'forwards'});
  var done=false,fin=function(){if(done)return;done=true;t.dataset.go=1;t.click();delete t.dataset.go;setTimeout(function(){var b=o.animate([{opacity:1},{opacity:0}],{duration:420,easing:'ease-out',fill:'forwards'});b.onfinish=function(){o.remove()}},260)};
  a.onfinish=fin;setTimeout(fin,900)},true);
+/* editable workspace colours (saved in this browser) */
+var K='pr-theme';function rd(){try{return JSON.parse(localStorage.getItem(K)||'{}')}catch(_){return {}}}
+function ap(t){var r=document.documentElement.style;if(t.g){r.setProperty('--g',t.g);r.setProperty('--g2','color-mix(in srgb,'+t.g+' 55%,#000)')}else{r.removeProperty('--g');r.removeProperty('--g2')}if(t.a)r.setProperty('--gold',t.a);else r.removeProperty('--gold')}
+ap(rd());
+function mount(){var o=document.getElementById('ew-out');if(!o||document.getElementById('th-g'))return;var t=rd(),w=document.createElement('span');w.className='ew-theme';
+ w.innerHTML='<input type="color" id="th-g" title="Main colour" aria-label="Main colour" value="'+(t.g||'#14532d')+'"><input type="color" id="th-a" title="Accent colour" aria-label="Accent colour" value="'+(t.a||'#c9a227')+'"><button type="button" id="th-r" title="Back to the default colours">Reset</button>';
+ o.parentNode.insertBefore(w,o);
+ function sv(){var n={g:document.getElementById('th-g').value,a:document.getElementById('th-a').value};try{localStorage.setItem(K,JSON.stringify(n))}catch(_){}ap(n)}
+ document.getElementById('th-g').oninput=sv;document.getElementById('th-a').oninput=sv;
+ document.getElementById('th-r').onclick=function(){try{localStorage.removeItem(K)}catch(_){}ap({});document.getElementById('th-g').value='#14532d';document.getElementById('th-a').value='#c9a227'}}
+mount();new MutationObserver(mount).observe(document.body,{childList:true,subtree:true});
 })();
