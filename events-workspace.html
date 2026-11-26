@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>ASA TUK Events Manager</title><link rel="icon" href="assets/favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/admin-config.js"></script>
+<script src="assets/auth-session.js"></script>
+<script src="assets/auth-ui.js"></script>
+<script src="assets/events-config.js"></script>
+<link rel="stylesheet" href="assets/events-workspace.css">
+<script src="assets/events-workspace.js" defer></script>
+</head>
+<body>
+<main id="login" class="ew-login"><section class="ew-logincard"><img src="assets/logo.png" alt="" width="56"><h1>Events Manager</h1><p>Sign in with your authorised ASA TUK account.</p>
+<form id="login-form" method="post" action="#"><label>Email<input id="email" type="email" autocomplete="username" required></label><label>Password<input id="password" type="password" autocomplete="current-password" required></label><button class="ew-btn" type="submit">Sign in</button></form><p id="login-msg" role="status"></p><a href="council-hub.html">← Council Hub</a></section></main>
+<div id="app" class="ew-shell" hidden>
+<aside id="ew-side"><div class="ew-brand"><img src="assets/logo.png" alt="" width="36"><div><b>ASA TUK</b><small>Events Manager</small></div></div><nav id="ew-nav"></nav><div class="ew-flag"></div></aside>
+<div class="ew-main"><header class="ew-top"><button id="ew-burger" class="ew-ic ew-onlym" aria-label="Menu">☰</button><div><b id="ew-hello"></b><small id="ew-date"></small></div><span class="ew-sp"></span><a class="ew-ghost" href="events.html" target="_blank" rel="noopener">View public page ↗</a><a class="ew-ghost" href="council-hub.html">Council Hub</a><button id="ew-out" class="ew-ghost">Sign out</button></header>
+<p id="ew-msg" role="status"></p><div id="ew-view"></div></div></div>
+<dialog id="ew-dlg"><form id="ew-form" method="dialog"></form></dialog>
+</body></html>
