@@ -168,6 +168,9 @@ async function start(u){S.user=u;try{
  $('ew-hello').textContent='hello, '+S.name;$('ew-date').textContent=new Date().toLocaleDateString([], {weekday:'long',day:'numeric',month:'long',year:'numeric'});
  $('login').hidden=true;$('app').hidden=false;nav();const h=location.hash.slice(1);await go(NAV.some(n=>n[0]===h)?h:'dashboard');
  }catch(e){$('login-msg').textContent='Could not load: '+(e.message||e)}}
+const THEME=()=>{try{return JSON.parse(localStorage.getItem('ew-theme')||'{}')}catch(_){return {}}},applyT=t=>{const r=document.documentElement.style;if(t.g){r.setProperty('--g',t.g);r.setProperty('--g2','color-mix(in srgb,'+t.g+' 55%,#1e1b8a)')}if(t.a)r.setProperty('--gold',t.a)};applyT(THEME());
+{const h=$('ew-out'),w=document.createElement('span'),t=THEME();w.className='ew-theme';w.innerHTML='<input type="color" id="th-g" title="Workspace main colour" value="'+(t.g||'#5b21b6')+'"><input type="color" id="th-a" title="Workspace accent colour" value="'+(t.a||'#e11d74')+'">';h.parentNode.insertBefore(w,h);
+ const sv=()=>{const n={g:$('th-g').value,a:$('th-a').value};try{localStorage.setItem('ew-theme',JSON.stringify(n))}catch(_){}applyT(n)};$('th-g').oninput=sv;$('th-a').oninput=sv}
 $('ew-burger').onclick=()=>$('ew-side').classList.toggle('open');$('ew-out').onclick=async()=>{await window.ASATUKAuth.signOut(db);location.reload()};
 $('login-form').addEventListener('submit',async e=>{e.preventDefault();$('login-msg').textContent='Signing in…';const r=await db.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(r.error){$('login-msg').textContent=r.error.message;return}start(r.data.user)});
 db.auth.getSession().then(({data})=>{if(data&&data.session)start(data.session.user)});
