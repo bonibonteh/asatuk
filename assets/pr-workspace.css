@@ -35,3 +35,6 @@ dialog{border:0;border-radius:20px;width:min(680px,94vw);max-height:92vh;backgro
 .pc-legend span{display:inline-block;margin-right:12px;font-size:12px}.pc-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px}
 .pc-prev{font-family:var(--ff)}.pc-prev h1{font-size:30px;margin:6px 0}.pc-prev .sub{color:var(--mut);font-size:18px}.pc-prev img{max-width:100%;border-radius:14px}
 textarea{resize:vertical}
+
+.pc-dn{border:0;background:transparent;font:inherit;font-weight:600;cursor:pointer;border-radius:8px;padding:0 6px;color:var(--ink)}.pc-dn:hover{background:var(--g);color:#fff}.pc-cal .d{cursor:pointer}.pc-cal .d:hover{border-color:var(--gold)}.pc-cal .d.over{background:#faf6ea;border-color:var(--gold)}
+#cp,#cn{flex:0 0 auto;min-width:44px}
