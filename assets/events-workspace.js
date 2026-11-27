@@ -164,7 +164,7 @@ SEC.design=async v=>{const [d,p]=await Promise.all([db.from('evt_page_draft').se
 /* ---------- boot ---------- */
 async function start(u){S.user=u;try{
  const [a,c]=await Promise.all([db.from('admin_users').select('role,is_suspended,display_name').eq('user_id',u.id).maybeSingle(),db.from('council_role_assignments').select('docket,role_title,display_name,can_manage_events,is_active,chapter').eq('user_id',u.id).eq('is_active',true)]);
- S.admin=!!(a.data&&a.data.role==='admin'&&!a.data.is_suspended);const asg=(c.data||[]).filter(x=>['Events','Organizing'].includes(x.docket)||x.can_manage_events);
+ S.admin=!!(a.data&&a.data.role==='admin'&&!a.data.is_suspended);window.ASATUKSwitch&&window.ASATUKSwitch.mount(c.data||[],S.admin);const asg=(c.data||[]).filter(x=>['Events','Organizing'].includes(x.docket)||x.can_manage_events);
  if(!S.admin&&!asg.length){window.ASATUKAuthUI&&window.ASATUKAuthUI.showDenied({message:'You are signed in, but this account is not assigned to the Events docket. Ask an administrator to assign you.',links:[{label:'Council Hub',href:'council-hub.html'},{label:'Main website',href:'index.html'}]});return}
  S.name=(asg[0]&&asg[0].display_name)||(a.data&&a.data.display_name)||(c.data&&c.data[0]&&c.data[0].display_name)||u.email;
  if(!$('ew-chap'))chapterUi(c.data||[]);$('ew-hello').textContent='hello, '+S.name;$('ew-date').textContent=new Date().toLocaleDateString([], {weekday:'long',day:'numeric',month:'long',year:'numeric'});

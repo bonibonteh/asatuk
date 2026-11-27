@@ -1,0 +1,6 @@
+/* Social Media workspace: lighter, more editorial palette on top of the shared workspace styles */
+.pc-stage{background:radial-gradient(120% 140% at 0% 0%,color-mix(in srgb,var(--g) 85%,#fff) 0,var(--g2) 60%,#1c1a14 100%)}
+.pc-tile.t2{background:#efe6d2}.pc-tile.t3{background:#fff}.pc-tile.t4{background:linear-gradient(120deg,#25231c,#3a362a)}.pc-tile.t5{background:#f6f1e4}.pc-tile.t6{background:linear-gradient(120deg,color-mix(in srgb,var(--gold) 80%,#fff),var(--gold))}
+.pc-tile.t6 b,.pc-tile.t6 span{color:#1c1a14}
+.ew-chips{display:flex;flex-wrap:wrap;gap:6px}.ew-chips .ew-ghost{border-radius:99px;padding:6px 14px}.ew-chips .ew-ghost.on{background:var(--g);color:#fff;border-color:var(--g)}
+#ew-sub{letter-spacing:.04em}
