@@ -188,8 +188,8 @@ SEC.opps=webSection({table:'opportunities',label:'Opportunities',note:'Published
 SEC.gallery=webSection({table:'gallery_collections',label:'Gallery collections',note:'Published collections appear on the public Gallery page.',sub:'description',img:'cover_image_url',upload:1,order:'event_date',fields:[['event_date','Event date','date'],['cover_image_url','Cover image URL','url'],['display_order','Display order','number'],['description','Description','area',4]]});
 /* ---------- boot ---------- */
 async function start(u){S.user=u;try{
- const [a,c]=await Promise.all([db.from('admin_users').select('role,is_suspended,display_name').eq('user_id',u.id).maybeSingle(),db.from('council_role_assignments').select('docket,display_name,can_manage_pr,is_docket_head,is_active,chapter').eq('user_id',u.id).eq('is_active',true)]);
- S.admin=!!(a.data&&a.data.role==='admin'&&!a.data.is_suspended);const asg=(c.data||[]).filter(x=>x.docket==='PR & Communications'||x.can_manage_pr);
+ const [a,c]=await Promise.all([db.from('admin_users').select('role,is_suspended,display_name').eq('user_id',u.id).maybeSingle(),db.from('council_role_assignments').select('docket,role_title,display_name,can_manage_pr,is_docket_head,is_active,chapter').eq('user_id',u.id).eq('is_active',true)]);
+ S.admin=!!(a.data&&a.data.role==='admin'&&!a.data.is_suspended);window.ASATUKSwitch&&window.ASATUKSwitch.mount(c.data||[],S.admin);const asg=(c.data||[]).filter(x=>x.docket==='PR & Communications'||x.can_manage_pr);
  if(!S.admin&&!asg.length){window.ASATUKAuthUI&&window.ASATUKAuthUI.showDenied({message:'You are signed in, but this account is not assigned to the PR & Communications docket. Ask an administrator to assign you.',links:[{label:'Council Hub',href:'council-hub.html'},{label:'Main website',href:'index.html'}]});return}
  S.approver=S.admin||asg.some(x=>x.is_docket_head);if(!$('ew-chap'))chapterUi(c.data||[]);S.name=(asg[0]&&asg[0].display_name)||(a.data&&a.data.display_name)||u.email;
  $('ew-hello').textContent='hello, '+S.name;$('ew-date').textContent=new Date().toLocaleDateString([], {weekday:'long',day:'numeric',month:'long',year:'numeric'});

@@ -11,7 +11,7 @@ const read = (f) => fs.readFileSync(path.join(SITE_ROOT, f), 'utf8');
 const html = fs.readdirSync(SITE_ROOT).filter((f) => f.endsWith('.html'));
 const assets = fs.readdirSync(path.join(SITE_ROOT, 'assets')).filter((f) => f.endsWith('.js')).map((f) => 'assets/' + f);
 const inline = (src) => [...src.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi)].filter((m) => !/ld\+json/.test(m[1]) && m[2].trim()).map((m) => m[2]);
-const STAFF_PAGES = ['admin.html', 'council-hub.html', 'council-access.html', 'merchandise-admin.html', 'treasurer-workspace.html', 'connect.html', 'academic-workspace.html', 'events-workspace.html', 'pr-workspace.html'];
+const STAFF_PAGES = ['admin.html', 'council-hub.html', 'council-access.html', 'merchandise-admin.html', 'treasurer-workspace.html', 'connect.html', 'academic-workspace.html', 'events-workspace.html', 'social-workspace.html', 'pr-workspace.html'];
 
 test('every JavaScript file parses (a parse error silently disables a whole page)', () => {
   for (const f of assets) assert.doesNotThrow(() => new vm.Script(read(f), { filename: f }), f);
@@ -52,7 +52,8 @@ test('sign-in forms cannot fall back to a GET that puts the password in the URL'
 
 test('staff pages do not redirect on their own (only an explicit reload after sign-out)', () => {
   const sources = { 'assets/admin.js': read('assets/admin.js'), ...Object.fromEntries(STAFF_PAGES.slice(1).map((f) => [f, inline(read(f)).join('\n')])) };
-  for (const [f, code] of Object.entries(sources)) assert.ok(!/location\s*\.\s*(href\s*=|replace\(|assign\()/.test(code), f + ' must not assign location');
+  // The only allowed hop: the Council Hub sends a signed-in official with exactly one workspace straight to it (workspace routing).
+  for (const [f, code0] of Object.entries(sources)) { const code = f === 'council-hub.html' ? code0.replace('location.replace(routes[wsd[0]])', '') : code0; assert.ok(!/location\s*\.\s*(href\s*=|replace\(|assign\()/.test(code), f + ' must not assign location'); }
 });
 
 test('no secret keys are present in browser-served files', () => {
